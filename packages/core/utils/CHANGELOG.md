@@ -1,5 +1,24 @@
 # @medusajs/utils
 
+## 2.1.1
+
+### Patch Changes
+
+- [#10459](https://github.com/medusajs/medusa/pull/10459) [`90ae187e097c42a224c701f31cbc2924ea6ee86b`](https://github.com/medusajs/medusa/commit/90ae187e097c42a224c701f31cbc2924ea6ee86b) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix: when/then step name
+
+- [#10477](https://github.com/medusajs/medusa/pull/10477) [`0a077d48e14976bafcf19705fc48e66756362fd6`](https://github.com/medusajs/medusa/commit/0a077d48e14976bafcf19705fc48e66756362fd6) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(workflow-engine): Migrate to DML
+
+- [#10442](https://github.com/medusajs/medusa/pull/10442) [`90d7f4ff3949ade9f6a7335c9611aae6633be908`](https://github.com/medusajs/medusa/commit/90d7f4ff3949ade9f6a7335c9611aae6633be908) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(utils): DML#hasOne allow mappedBy to not be defined
+
+- [#10476](https://github.com/medusajs/medusa/pull/10476) [`f65a3cc06df9faca3615f30eb4d3bf889efa5765`](https://github.com/medusajs/medusa/commit/f65a3cc06df9faca3615f30eb4d3bf889efa5765) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix: avoid optional fields on graphql generated types
+
+- [#10415](https://github.com/medusajs/medusa/pull/10415) [`b160fd3cbf6edf06702fa15b694709375557d188`](https://github.com/medusajs/medusa/commit/b160fd3cbf6edf06702fa15b694709375557d188) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(utils): DML one to one definition
+
+- [#10385](https://github.com/medusajs/medusa/pull/10385) [`0a16efa4266f93302b31589349e777bc8d24dc07`](https://github.com/medusajs/medusa/commit/0a16efa4266f93302b31589349e777bc8d24dc07) Thanks [@thetutlage](https://github.com/thetutlage)! - refactor: migrate cart module to DML
+
+- Updated dependencies [[`16663ec8132e99bac7fbfe2adda542a5294d2384`](https://github.com/medusajs/medusa/commit/16663ec8132e99bac7fbfe2adda542a5294d2384), [`559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a`](https://github.com/medusajs/medusa/commit/559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a)]:
+  - @medusajs/types@2.1.1
+
 ## 2.1.0
 
 ### Patch Changes

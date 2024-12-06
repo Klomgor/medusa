@@ -1,5 +1,13 @@
 # @medusajs/types
 
+## 2.1.1
+
+### Patch Changes
+
+- [#10449](https://github.com/medusajs/medusa/pull/10449) [`16663ec8132e99bac7fbfe2adda542a5294d2384`](https://github.com/medusajs/medusa/commit/16663ec8132e99bac7fbfe2adda542a5294d2384) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,types): Add missing Metadata form for Region domain and fix types
+
+- [#10193](https://github.com/medusajs/medusa/pull/10193) [`559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a`](https://github.com/medusajs/medusa/commit/559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(): Deleted default sales channel should be prevented
+
 ## 2.1.0
 
 ### Patch Changes

@@ -1,5 +1,7 @@
 # @medusajs/notification
 
+## 2.1.1
+
 ## 2.1.0
 
 ## 2.0.7
