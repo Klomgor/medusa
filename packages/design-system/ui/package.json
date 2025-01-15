@@ -65,7 +65,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-storybook": "^0.6.12",
     "jsdom": "^22.1.0",
-    "postcss": "^8.4.38",
+    "postcss": "^8.5.1",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -75,7 +75,7 @@
     "tailwindcss": "^3.4.3",
     "tsc-alias": "^1.8.7",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
+    "vite": "^4.5.5",
     "vite-plugin-turbosnap": "^1.0.2",
     "vitest": "^0.32.2"
   },
