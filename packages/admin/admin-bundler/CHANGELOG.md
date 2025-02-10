@@ -1,5 +1,40 @@
 # @medusajs/admin-bundler
 
+## 2.4.0
+
+### Patch Changes
+
+- [#11112](https://github.com/medusajs/medusa/pull/11112) [`57892bee0054eb5f3e9075014b1f6b966dc531db`](https://github.com/medusajs/medusa/commit/57892bee0054eb5f3e9075014b1f6b966dc531db) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(admin-bundler): Optimize tanstack/react-query
+
+- [#11086](https://github.com/medusajs/medusa/pull/11086) [`b9c469a6d445dfb2f692bc16753c660426a48bdc`](https://github.com/medusajs/medusa/commit/b9c469a6d445dfb2f692bc16753c660426a48bdc) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(admin-bundler): Fix Vite imports to prevent deprecation warnings
+
+- Updated dependencies [[`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2), [`4eecda5466c4b82eadc7447d4de80f0d2663d668`](https://github.com/medusajs/medusa/commit/4eecda5466c4b82eadc7447d4de80f0d2663d668), [`6346836c2d2e9830f60a3e583191555e3f10dd6d`](https://github.com/medusajs/medusa/commit/6346836c2d2e9830f60a3e583191555e3f10dd6d), [`c400719fcc8ae04ba95a15ef9e6f583969e6c0b0`](https://github.com/medusajs/medusa/commit/c400719fcc8ae04ba95a15ef9e6f583969e6c0b0), [`83c91f118621dd39691bad0d672015a3a80d1cce`](https://github.com/medusajs/medusa/commit/83c91f118621dd39691bad0d672015a3a80d1cce), [`5ff45f27a107da48c943a9c502e15555f66d8722`](https://github.com/medusajs/medusa/commit/5ff45f27a107da48c943a9c502e15555f66d8722), [`0bef3202f3393ed35bddb7278d51f95ec314fcba`](https://github.com/medusajs/medusa/commit/0bef3202f3393ed35bddb7278d51f95ec314fcba), [`147c0e5a353b57d3a17db3b572334db58c830b3c`](https://github.com/medusajs/medusa/commit/147c0e5a353b57d3a17db3b572334db58c830b3c)]:
+  - @medusajs/dashboard@2.4.0
+  - @medusajs/admin-shared@2.4.0
+  - @medusajs/admin-vite-plugin@2.4.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.3.1
+  - @medusajs/admin-vite-plugin@2.3.1
+  - @medusajs/dashboard@2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10941](https://github.com/medusajs/medusa/pull/10941) [`4bc3f5b845f832959bed3d5f2bd320b55a8fb50f`](https://github.com/medusajs/medusa/commit/4bc3f5b845f832959bed3d5f2bd320b55a8fb50f) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(medusa,admin-bundler,cli,framework): Integrate admin extensions into plugin build
+
+- [#10869](https://github.com/medusajs/medusa/pull/10869) [`1ba2fadf22a30de9f94aee4f195163ef5e9e84d2`](https://github.com/medusajs/medusa/commit/1ba2fadf22a30de9f94aee4f195163ef5e9e84d2) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(admin-bundler,admin-vite-plugin): Support loading loading admin extensions from plugins.
+
+- Updated dependencies [[`1758bfb8d042fa9fc82f23c36ccd61e4a439448e`](https://github.com/medusajs/medusa/commit/1758bfb8d042fa9fc82f23c36ccd61e4a439448e), [`5eab9e739919594ae7e7e416942ec93d84b699fd`](https://github.com/medusajs/medusa/commit/5eab9e739919594ae7e7e416942ec93d84b699fd), [`1ba2fadf22a30de9f94aee4f195163ef5e9e84d2`](https://github.com/medusajs/medusa/commit/1ba2fadf22a30de9f94aee4f195163ef5e9e84d2), [`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c), [`2a25b4d95f2b7a4d53138718c94124f47f041b36`](https://github.com/medusajs/medusa/commit/2a25b4d95f2b7a4d53138718c94124f47f041b36)]:
+  - @medusajs/dashboard@2.3.0
+  - @medusajs/admin-vite-plugin@2.3.0
+  - @medusajs/admin-shared@2.3.0
+
 ## 2.2.0
 
 ### Patch Changes

@@ -298,6 +298,9 @@
     }
   },
   "filters": {
+    "sortLabel": "Sort",
+    "filterLabel": "Filter",
+    "searchLabel": "Search",
     "date": {
       "today": "Today",
       "lastSevenDays": "Last 7 days",
@@ -306,7 +309,9 @@
       "lastTwelveMonths": "Last 12 months",
       "custom": "Custom",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "starting": "Starting",
+      "ending": "Ending"
     },
     "compare": {
       "lessThan": "Less than",
@@ -316,6 +321,18 @@
       "lessThanLabel": "less than {{value}}",
       "greaterThanLabel": "greater than {{value}}",
       "andLabel": "and"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "A to Z",
+      "alphabeticallyDesc": "Z to A",
+      "dateAsc": "Newest first",
+      "dateDesc": "Oldest first"
+    },
+    "radio": {
+      "yes": "Yes",
+      "no": "No",
+      "true": "True",
+      "false": "False"
     },
     "addFilter": "Add filter"
   },
@@ -468,7 +485,17 @@
       }
     },
     "deleteWarning": "You are about to delete the product {{title}}. This action cannot be undone.",
-    "variants": "Variants",
+    "variants": {
+      "header": "Variants",
+      "empty": {
+        "heading": "No variants",
+        "description": "There are no variants to display."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No variants match the current filter criteria."
+      }
+    },
     "attributes": "Attributes",
     "editAttributes": "Edit Attributes",
     "editOptions": "Edit Options",
@@ -526,6 +553,10 @@
       "discountable": {
         "label": "Discountable",
         "hint": "When unchecked, discounts will not be applied to this product"
+      },
+      "shipping_profile": {
+        "label": "Shipping profile",
+        "hint": "Connect the product to a shipping profile"
       },
       "type": {
         "label": "Type"
@@ -652,6 +683,20 @@
       "tooltips": {
         "alreadyManaged": "This inventory item is already editable under {{title}}.",
         "alreadyManagedWithSku": "This inventory item is already editable under {{title}} ({{sku}})."
+      }
+    },
+    "shippingProfile": {
+      "header": "Shipping configuration",
+      "edit": {
+        "header": "Shipping Configuration",
+        "toasts": {
+          "success": "Successfully updated the shipping profile for {{title}}."
+        }
+      },
+      "create": {
+        "errors": {
+          "required": "Shipping profile is required"
+        }
       }
     },
     "toasts": {
@@ -891,6 +936,16 @@
   "customerGroups": {
     "domain": "Customer Groups",
     "subtitle": "Organize customers into groups. Groups can have different promotions and prices.",
+    "list": {
+      "empty": {
+        "heading": "No customer groups",
+        "description": "There are no customer groups to display."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No customer groups match the current filter criteria."
+      }
+    },
     "create": {
       "header": "Create Customer Group",
       "hint": "Create a new customer group to segment your customers.",
@@ -1212,6 +1267,8 @@
     "fulfillment": {
       "cancelWarning": "You are about to cancel a fulfillment. This action cannot be undone.",
       "markAsDeliveredWarning": "You are about to mark fulfillment as delivered. This action cannot be undone.",
+      "differentOptionSelected": "The selected shipping option is different from the one selected by the customer.",
+      "disabledItemTooltip": "The shipping option you have selected don’t allow fulfillment of this item",
       "unfulfilledItems": "Unfulfilled Items",
       "statusLabel": "Fulfillment status",
       "statusTitle": "Fulfillment Status",
@@ -1232,7 +1289,9 @@
       "error": {
         "wrongQuantity": "Only one item is available for fulfillment",
         "wrongQuantity_other": "Quantity should be a number between 1 and {{number}}",
-        "noItems": "No items to fulfill."
+        "noItems": "No items to fulfill.",
+        "noShippingOption": "Shipping option is required",
+        "noLocation": "Location is required"
       },
       "status": {
         "notFulfilled": "Not fulfilled",
@@ -1454,6 +1513,7 @@
     },
     "salesChannels": {
       "header": "Sales Channels",
+      "hint": "Manage the sales channels that are connected to this location.",
       "label": "Connected sales channels",
       "connectedTo": "Connected to {{count}} of {{total}} sales channels",
       "noChannels": "The location is not connected to any sales channels.",
@@ -1933,7 +1993,19 @@
         }
       },
       "status": {
-        "title": "Status"
+        "label": "Status",
+        "draft": {
+          "title": "Draft",
+          "description": "Customers will not be able to use the code yet"
+        },
+        "active": {
+          "title": "Active",
+          "description": "Customers will be able to use the code"
+        },
+        "inactive": {
+          "title": "Inactive",
+          "description": "Customers will no longer be able to use the code"
+        }
       },
       "method": {
         "label": "Method",
@@ -2230,7 +2302,18 @@
       "developer": "Developer",
       "member": "Member"
     },
+    "list": {
+      "empty": {
+        "heading": "No users found",
+        "description": "Once a user has been invited, they will appear here."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No users match the current filter criteria."
+      }
+    },
     "deleteUserWarning": "You are about to delete the user {{name}}. This action cannot be undone.",
+    "deleteUserSuccess": "User {{name}} deleted successfully",
     "invite": "Invite"
   },
   "store": {
@@ -2239,6 +2322,8 @@
     "editStore": "Edit store",
     "defaultCurrency": "Default currency",
     "defaultRegion": "Default region",
+    "defaultSalesChannel": "Default sales channel",
+    "defaultLocation": "Default location",
     "swapLinkTemplate": "Swap link template",
     "paymentLinkTemplate": "Payment link template",
     "inviteLinkTemplate": "Invite link template",
@@ -2385,6 +2470,16 @@
   "salesChannels": {
     "domain": "Sales Channels",
     "subtitle": "Manage the online and offline channels you sell products on.",
+    "list": {
+      "empty": {
+        "heading": "No sales channels found",
+        "description": "Once a sales channel has been created, it will appear here."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No sales channels match the current filter criteria."
+      }
+    },
     "createSalesChannel": "Create Sales Channel",
     "createSalesChannelHint": "Create a new sales channel to sell your products on.",
     "enabledHint": "Specify whether the sales channel is enabled.",
@@ -2676,6 +2771,8 @@
     "scheduled": "Scheduled",
     "expired": "Expired",
     "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
@@ -2687,7 +2784,9 @@
     "added": "Added",
     "removed": "Removed",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "beaware": "Be aware",
+    "loading": "Loading"
   },
   "fields": {
     "amount": "Amount",

@@ -9,7 +9,8 @@ export type BasePaymentCollectionStatus =
   | "authorized"
   | "partially_authorized"
   | "canceled"
-
+  | "completed"
+  | "failed"
 /**
  *
  * The status of a payment session.
@@ -42,11 +43,6 @@ export interface BasePaymentCollection {
    * The ISO 3 character currency code of the payment sessions and payments associated with payment collection.
    */
   currency_code: string
-
-  /**
-   * The id of the associated region.
-   */
-  region_id: string
 
   /**
    * The total amount to be authorized and captured.
@@ -140,26 +136,6 @@ export interface BasePayment {
    * The ID of the associated payment provider.
    */
   provider_id: string
-
-  /**
-   * The ID of the associated cart.
-   */
-  cart_id?: string
-
-  /**
-   * The ID of the associated order.
-   */
-  order_id?: string
-
-  /**
-   * The ID of the associated order edit.
-   */
-  order_edit_id?: string
-
-  /**
-   * The ID of the associated customer.
-   */
-  customer_id?: string
 
   /**
    * The data relevant for the payment provider to process the payment.

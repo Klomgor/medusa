@@ -1,11 +1,53 @@
-import { PromotionType } from "@medusajs/utils"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
-import { createAdminUser } from "../../../../helpers/create-admin-user"
+import { PromotionStatus, PromotionType } from "@medusajs/utils"
+import {
+  createAdminUser,
+  generatePublishableKey,
+  generateStoreHeaders,
+} from "../../../../helpers/create-admin-user"
+import { medusaTshirtProduct } from "../../../__fixtures__/product"
 
 jest.setTimeout(50000)
 
 const adminHeaders = {
   headers: { "x-medusa-access-token": "test_token" },
+}
+
+const standardPromotionPayload = {
+  code: "TEST",
+  type: PromotionType.STANDARD,
+  status: PromotionStatus.ACTIVE,
+  is_automatic: true,
+  campaign: {
+    name: "test",
+    campaign_identifier: "test-1",
+    budget: {
+      type: "usage",
+      limit: 100,
+    },
+  },
+  application_method: {
+    target_type: "items",
+    type: "fixed",
+    allocation: "each",
+    currency_code: "USD",
+    value: 100,
+    max_quantity: 100,
+    target_rules: [
+      {
+        attribute: "test.test",
+        operator: "eq",
+        values: ["test1", "test2"],
+      },
+    ],
+  },
+  rules: [
+    {
+      attribute: "test.test",
+      operator: "eq",
+      values: ["test1", "test2"],
+    },
+  ],
 }
 
 medusaIntegrationTestRunner({
@@ -14,6 +56,7 @@ medusaIntegrationTestRunner({
       let appContainer
       let promotion
       let standardPromotion
+      let shippingProfile
 
       const promotionRule = {
         operator: "eq",
@@ -34,6 +77,7 @@ medusaIntegrationTestRunner({
             {
               code: "TEST_ACROSS",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 allocation: "across",
@@ -47,6 +91,14 @@ medusaIntegrationTestRunner({
             adminHeaders
           )
         ).data.promotion
+
+        shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "default", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
       })
 
       describe("GET /admin/promotions/:id", () => {
@@ -120,6 +172,7 @@ medusaIntegrationTestRunner({
             {
               code: "first",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 target_type: "order",
@@ -180,44 +233,27 @@ medusaIntegrationTestRunner({
           )
         })
 
+        it("should throw error when an incorrect status is passed", async () => {
+          const { response } = await api
+            .post(
+              `/admin/promotions`,
+              { ...standardPromotionPayload, status: "does-not-exist" },
+              adminHeaders
+            )
+            .catch((e) => e)
+
+          expect(response.status).toEqual(400)
+          expect(response.data).toEqual({
+            type: "invalid_data",
+            message:
+              "Invalid request: Expected: 'draft, active, inactive' for field 'status', but got: 'does-not-exist'",
+          })
+        })
+
         it("should create a standard promotion successfully", async () => {
           const response = await api.post(
             `/admin/promotions`,
-            {
-              code: "TEST",
-              type: PromotionType.STANDARD,
-              is_automatic: true,
-              campaign: {
-                name: "test",
-                campaign_identifier: "test-1",
-                budget: {
-                  type: "usage",
-                  limit: 100,
-                },
-              },
-              application_method: {
-                target_type: "items",
-                type: "fixed",
-                allocation: "each",
-                currency_code: "USD",
-                value: 100,
-                max_quantity: 100,
-                target_rules: [
-                  {
-                    attribute: "test.test",
-                    operator: "eq",
-                    values: ["test1", "test2"],
-                  },
-                ],
-              },
-              rules: [
-                {
-                  attribute: "test.test",
-                  operator: "eq",
-                  values: ["test1", "test2"],
-                },
-              ],
-            },
+            standardPromotionPayload,
             adminHeaders
           )
 
@@ -275,6 +311,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.BUYGET,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 application_method: {
                   target_type: "items",
@@ -316,6 +353,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.BUYGET,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 application_method: {
                   target_type: "items",
@@ -356,6 +394,7 @@ medusaIntegrationTestRunner({
             {
               code: "TEST",
               type: PromotionType.BUYGET,
+              status: PromotionStatus.ACTIVE,
               is_automatic: true,
               campaign: {
                 name: "test",
@@ -457,6 +496,139 @@ medusaIntegrationTestRunner({
             })
           )
         })
+
+        describe("with cart", () => {
+          it("should add promotion to cart only when gte rule matches", async () => {
+            const publishableKey = await generatePublishableKey(appContainer)
+            const storeHeaders = generateStoreHeaders({ publishableKey })
+
+            const salesChannel = (
+              await api.post(
+                "/admin/sales-channels",
+                { name: "Webshop", description: "channel" },
+                adminHeaders
+              )
+            ).data.sales_channel
+
+            const region = (
+              await api.post(
+                "/admin/regions",
+                { name: "US", currency_code: "usd", countries: ["us"] },
+                adminHeaders
+              )
+            ).data.region
+
+            const product = (
+              await api.post(
+                "/admin/products",
+                {
+                  ...medusaTshirtProduct,
+                  shipping_profile_id: shippingProfile.id,
+                },
+                adminHeaders
+              )
+            ).data.product
+
+            const cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+                  promo_codes: [promotion.code],
+                },
+                storeHeaders
+              )
+            ).data.cart
+
+            const response = await api.post(
+              `/admin/promotions`,
+              {
+                code: "TEST",
+                type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
+                is_automatic: true,
+                application_method: {
+                  target_type: "items",
+                  type: "fixed",
+                  allocation: "each",
+                  currency_code: "USD",
+                  value: 100,
+                  max_quantity: 100,
+                },
+                rules: [
+                  {
+                    attribute: "subtotal",
+                    operator: "gte",
+                    values: "2000",
+                  },
+                ],
+              },
+              adminHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.promotion).toEqual(
+              expect.objectContaining({
+                id: expect.any(String),
+                code: "TEST",
+                type: "standard",
+                is_automatic: true,
+                application_method: expect.objectContaining({
+                  value: 100,
+                  max_quantity: 100,
+                  type: "fixed",
+                  target_type: "items",
+                  allocation: "each",
+                  target_rules: [],
+                }),
+                rules: [
+                  expect.objectContaining({
+                    operator: "gte",
+                    attribute: "subtotal",
+                    values: expect.arrayContaining([
+                      expect.objectContaining({ value: "2000" }),
+                    ]),
+                  }),
+                ],
+              })
+            )
+
+            const cartWithPromotion1 = (
+              await api.post(
+                `/store/carts/${cart.id}`,
+                { promo_codes: [promotion.code] },
+                storeHeaders
+              )
+            ).data.cart
+
+            expect(cartWithPromotion1).toEqual(
+              expect.objectContaining({
+                promotions: [],
+              })
+            )
+
+            const cartWithPromotion2 = (
+              await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                { variant_id: product.variants[0].id, quantity: 40 },
+                storeHeaders
+              )
+            ).data.cart
+            console.log("cartWithPromotion2 -- ", cartWithPromotion2.promotions)
+            expect(cartWithPromotion2).toEqual(
+              expect.objectContaining({
+                promotions: [
+                  expect.objectContaining({
+                    code: response.data.promotion.code,
+                  }),
+                ],
+              })
+            )
+          })
+        })
       })
 
       describe("DELETE /admin/promotions/:id", () => {
@@ -491,7 +663,7 @@ medusaIntegrationTestRunner({
 
           expect(response.status).toEqual(404)
           expect(response.data.message).toEqual(
-            `Promotion with id "does-not-exist" not found`
+            `Promotion id not found: does-not-exist`
           )
         })
 
@@ -1334,6 +1506,7 @@ medusaIntegrationTestRunner({
               {
                 title: "Test product 1",
                 options: [{ title: "size", values: ["large", "small"] }],
+                shipping_profile_id: shippingProfile.id,
               },
               adminHeaders
             )
@@ -1345,6 +1518,7 @@ medusaIntegrationTestRunner({
               {
                 title: "Test product 2",
                 options: [{ title: "size", values: ["large", "small"] }],
+                shipping_profile_id: shippingProfile.id,
               },
               adminHeaders
             )

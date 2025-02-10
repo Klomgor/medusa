@@ -205,6 +205,16 @@ function buildLocalCommands(cli, isLocalProject) {
       ),
     })
     .command({
+      command: "db:migrate:scripts",
+      desc: "Run all migration scripts",
+      handler: handlerP(
+        getCommandHandler("db/run-scripts", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          return cmd(args)
+        })
+      ),
+    })
+    .command({
       command: "db:rollback [modules...]",
       desc: "Rollback last batch of executed migrations for a given module",
       builder: {
@@ -233,6 +243,16 @@ function buildLocalCommands(cli, isLocalProject) {
       },
       handler: handlerP(
         getCommandHandler("db/generate", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          return cmd(args)
+        })
+      ),
+    })
+    .command({
+      command: "plugin:db:generate",
+      desc: "Generate migrations for modules in a plugin",
+      handler: handlerP(
+        getCommandHandler("plugin/db/generate", (args, cmd) => {
           process.env.NODE_ENV = process.env.NODE_ENV || `development`
           return cmd(args)
         })
@@ -402,7 +422,7 @@ function buildLocalCommands(cli, isLocalProject) {
           }),
       handler: handlerP(
         getCommandHandler(`start`, (args, cmd) => {
-          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          process.env.NODE_ENV = process.env.NODE_ENV || `production`
           cmd(args)
           // Return an empty promise to prevent handlerP from exiting early.
           // The development server shouldn't ever exit until the user directly

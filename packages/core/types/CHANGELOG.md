@@ -1,5 +1,33 @@
 # @medusajs/types
 
+## 2.4.0
+
+### Minor Changes
+
+- [#10292](https://github.com/medusajs/medusa/pull/10292) [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: upgrade to mikro-orm 6
+
+### Patch Changes
+
+- [#10964](https://github.com/medusajs/medusa/pull/10964) [`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,js-sdk,types): Remove redundant body for markAsDelivered
+
+## 2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10892](https://github.com/medusajs/medusa/pull/10892) [`ff725090bb4ec848cb82c5411bdc25c4b72252ab`](https://github.com/medusajs/medusa/commit/ff725090bb4ec848cb82c5411bdc25c4b72252ab) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(types): add missing inventory_items to input of createProductsWorkflow
+
+- [#10950](https://github.com/medusajs/medusa/pull/10950) [`5eab9e739919594ae7e7e416942ec93d84b699fd`](https://github.com/medusajs/medusa/commit/5eab9e739919594ae7e7e416942ec93d84b699fd) Thanks [@riqwan](https://github.com/riqwan)! - feat(promotion,dashboard,types,utils,medusa): Add statuses to promotions
+
+- [#10975](https://github.com/medusajs/medusa/pull/10975) [`c75678d6d41d3b88d07681ad7e24472d6cbde672`](https://github.com/medusajs/medusa/commit/c75678d6d41d3b88d07681ad7e24472d6cbde672) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: add support for loading admin extensions from the source
+
+- [#10895](https://github.com/medusajs/medusa/pull/10895) [`c1930bd6568043d145e34d8360015e7207e18e4a`](https://github.com/medusajs/medusa/commit/c1930bd6568043d145e34d8360015e7207e18e4a) Thanks [@thetutlage](https://github.com/thetutlage)! - Feat/merge plugin modules
+
+- [#10874](https://github.com/medusajs/medusa/pull/10874) [`28febfc6438351fddb5b214b86f96aff89db688e`](https://github.com/medusajs/medusa/commit/28febfc6438351fddb5b214b86f96aff89db688e) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: remove dead code and refactor the logic of resolving plugins
+
+- [#10630](https://github.com/medusajs/medusa/pull/10630) [`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(inventory,dashboard,core-flows,js-sdk,types,medusa): Improve inventory management UX
+
 ## 2.2.0
 
 ### Minor Changes

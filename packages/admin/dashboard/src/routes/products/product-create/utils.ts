@@ -24,6 +24,7 @@ export const normalizeProductFormValues = (
       : undefined,
     images,
     collection_id: values.collection_id || undefined,
+    shipping_profile_id: values.shipping_profile_id,
     categories: values.categories.map((id) => ({ id })),
     type_id: values.type_id || undefined,
     handle: values.handle || undefined,
@@ -58,6 +59,7 @@ export const normalizeVariants = (
     sku: variant.sku || undefined,
     manage_inventory: !!variant.manage_inventory,
     allow_backorder: !!variant.allow_backorder,
+    variant_rank: variant.variant_rank,
     inventory_items: variant
       .inventory!.map((i) => {
         const quantity = i.required_quantity

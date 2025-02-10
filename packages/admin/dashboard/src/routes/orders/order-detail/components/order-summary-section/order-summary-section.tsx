@@ -50,6 +50,7 @@ import { formatCurrency } from "../../../../../lib/format-currency"
 import {
   getLocaleAmount,
   getStylizedAmount,
+  isAmountLessThenRoundingError,
 } from "../../../../../lib/money-amount-helpers"
 import { getTotalCaptured } from "../../../../../lib/payment"
 import { getReturnableQuantity } from "../../../../../lib/rma"
@@ -125,9 +126,16 @@ export const OrderSummarySection = ({ order }: OrderSummarySectionProps) => {
     unpaidPaymentCollection?.id!
   )
 
+  const pendingDifference = order.summary?.pending_difference || 0
+  const isAmountSignificant = !isAmountLessThenRoundingError(
+    pendingDifference,
+    order.currency_code
+  )
+
   const showPayment =
-    unpaidPaymentCollection && (order?.summary?.pending_difference || 0) > 0
-  const showRefund = (order?.summary?.pending_difference || 0) < 0
+    unpaidPaymentCollection && pendingDifference > 0 && isAmountSignificant
+  const showRefund =
+    unpaidPaymentCollection && pendingDifference < 0 && isAmountSignificant
 
   const handleMarkAsPaid = async (
     paymentCollection: AdminPaymentCollection
@@ -261,7 +269,7 @@ export const OrderSummarySection = ({ order }: OrderSummarySectionProps) => {
             >
               {t("orders.payment.refundAmount", {
                 amount: getStylizedAmount(
-                  (order?.summary?.pending_difference || 0) * -1,
+                  pendingDifference * -1,
                   order?.currency_code
                 ),
               })}

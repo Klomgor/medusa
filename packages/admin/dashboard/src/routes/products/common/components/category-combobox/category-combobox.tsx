@@ -6,8 +6,8 @@ import {
   XMarkMini,
 } from "@medusajs/icons"
 import { AdminProductCategoryResponse } from "@medusajs/types"
-import { Text, clx } from "@medusajs/ui"
-import * as Popover from "@radix-ui/react-popover"
+import { Divider, Text, clx } from "@medusajs/ui"
+import { Popover as RadixPopover } from "radix-ui"
 import {
   CSSProperties,
   ComponentPropsWithoutRef,
@@ -22,7 +22,6 @@ import {
   useState,
 } from "react"
 import { Trans, useTranslation } from "react-i18next"
-import { Divider } from "../../../../../components/common/divider"
 import { TextSkeleton } from "../../../../../components/common/skeleton"
 import { useProductCategories } from "../../../../../hooks/api/categories"
 import { useDebouncedSearch } from "../../../../../hooks/use-debounced-search"
@@ -239,8 +238,8 @@ export const CategoryCombobox = forwardRef<
   }
 
   return (
-    <Popover.Root open={open} onOpenChange={handleOpenChange}>
-      <Popover.Anchor
+    <RadixPopover.Root open={open} onOpenChange={handleOpenChange}>
+      <RadixPopover.Anchor
         asChild
         onClick={() => {
           if (!open) {
@@ -317,8 +316,8 @@ export const CategoryCombobox = forwardRef<
             <TrianglesMini className="text-ui-fg-muted" />
           </button>
         </div>
-      </Popover.Anchor>
-      <Popover.Content
+      </RadixPopover.Anchor>
+      <RadixPopover.Content
         sideOffset={4}
         role="listbox"
         className={clx(
@@ -454,8 +453,8 @@ export const CategoryCombobox = forwardRef<
             </div>
           )}
         </div>
-      </Popover.Content>
-    </Popover.Root>
+      </RadixPopover.Content>
+    </RadixPopover.Root>
   )
 })
 

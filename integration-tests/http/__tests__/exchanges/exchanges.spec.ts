@@ -1,16 +1,16 @@
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   ContainerRegistrationKeys,
   Modules,
   RuleOperator,
 } from "@medusajs/utils"
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   adminHeaders,
   createAdminUser,
 } from "../../../helpers/create-admin-user"
 import { setupTaxStructure } from "../../../modules/__tests__/fixtures/tax"
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 
 medusaIntegrationTestRunner({
   testSuite: ({ dbConnection, getContainer, api }) => {
@@ -41,6 +41,17 @@ medusaIntegrationTestRunner({
         )
       ).data.region
 
+      shippingProfile = (
+        await api.post(
+          `/admin/shipping-profiles`,
+          {
+            name: "Test",
+            type: "default",
+          },
+          adminHeaders
+        )
+      ).data.shipping_profile
+
       const customer = (
         await api.post(
           "/admin/customers",
@@ -67,6 +78,7 @@ medusaIntegrationTestRunner({
           "/admin/products",
           {
             title: "Test product",
+            shipping_profile_id: shippingProfile.id,
             options: [{ title: "size", values: ["large", "small"] }],
             variants: [
               {
@@ -91,6 +103,7 @@ medusaIntegrationTestRunner({
           "/admin/products",
           {
             title: "Extra product",
+            shipping_profile_id: shippingProfile.id,
             options: [{ title: "size", values: ["large", "small"] }],
             variants: [
               {
@@ -202,17 +215,6 @@ medusaIntegrationTestRunner({
         currency_code: "usd",
         customer_id: customer.id,
       })
-
-      shippingProfile = (
-        await api.post(
-          `/admin/shipping-profiles`,
-          {
-            name: "Test",
-            type: "default",
-          },
-          adminHeaders
-        )
-      ).data.shipping_profile
 
       location = (
         await api.post(

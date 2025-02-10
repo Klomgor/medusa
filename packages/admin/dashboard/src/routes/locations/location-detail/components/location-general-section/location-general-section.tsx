@@ -11,6 +11,7 @@ import { HttpTypes } from "@medusajs/types"
 import {
   Badge,
   Container,
+  Divider,
   Heading,
   IconButton,
   StatusBadge,
@@ -23,7 +24,6 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { ActionMenu } from "../../../../../components/common/action-menu"
-import { Divider } from "../../../../../components/common/divider"
 import { NoRecords } from "../../../../../components/common/empty-table-content"
 import { IconAvatar } from "../../../../../components/common/icon-avatar"
 import { LinkButton } from "../../../../../components/common/link-button"

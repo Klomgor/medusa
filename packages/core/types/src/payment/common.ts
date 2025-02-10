@@ -1,6 +1,7 @@
 import { BaseFilterable } from "../dal"
 import { OperatorMap } from "../dal/utils"
 import { BigNumberValue } from "../totals"
+import { PaymentProviderContext } from "./provider"
 /* ********** PAYMENT COLLECTION ********** */
 
 export type PaymentCollectionStatus =
@@ -9,6 +10,8 @@ export type PaymentCollectionStatus =
   | "authorized"
   | "partially_authorized"
   | "canceled"
+  | "failed"
+  | "completed"
 
 export type PaymentSessionStatus =
   | "authorized"
@@ -31,11 +34,6 @@ export interface PaymentCollectionDTO {
    * The ISO 3 character currency code of the payment sessions and payments associated with payment collection.
    */
   currency_code: string
-
-  /**
-   * The id of the associated region.
-   */
-  region_id: string
 
   /**
    * The total amount to be authorized and captured.
@@ -115,11 +113,6 @@ export interface FilterablePaymentCollectionProps
   id?: string | string[]
 
   /**
-   * Filter by associated region's ID.
-   */
-  region_id?: string | string[] | OperatorMap<string>
-
-  /**
    * Filter payment collections by created date.
    */
   created_at?: OperatorMap<string>
@@ -159,11 +152,6 @@ export interface FilterablePaymentSessionProps
    * Filter the payment sessions by the ID of their associated payment collection.
    */
   payment_collection_id?: string | string[]
-
-  /**
-   * Filter the payment sessions by the ID of their associated region.
-   */
-  region_id?: string | string[] | OperatorMap<string>
 
   /**
    * Filter the payment sessions by their creation date.
@@ -260,6 +248,22 @@ export interface FilterableRefundProps extends BaseFilterable<RefundDTO> {
    */
   deleted_at?: OperatorMap<string>
 }
+
+/**
+ * The filters to apply on the retrieved payment sessions.
+ */
+export interface FilterablePaymentMethodProps {
+  /**
+   * Filter the payment methods by provider.
+   */
+  provider_id: string
+
+  /**
+   * Filter the payment methods by the context of their associated payment provider.
+   */
+  context: PaymentProviderContext
+}
+
 /* ********** PAYMENT ********** */
 export interface PaymentDTO {
   /**
@@ -296,26 +300,6 @@ export interface PaymentDTO {
    * The ID of the associated payment provider.
    */
   provider_id: string
-
-  /**
-   * The ID of the associated cart.
-   */
-  cart_id?: string
-
-  /**
-   * The ID of the associated order.
-   */
-  order_id?: string
-
-  /**
-   * The ID of the associated order edit.
-   */
-  order_edit_id?: string
-
-  /**
-   * The ID of the associated customer.
-   */
-  customer_id?: string
 
   /**
    * The data relevant for the payment provider to process the payment.
@@ -402,7 +386,7 @@ export interface PaymentDTO {
 export interface FilterablePaymentProps
   extends BaseFilterable<FilterablePaymentProps> {
   /**
-   * Find payments based on cart, order, or customer IDs through this search term.
+   * Find payments based on different fields.
    */
   q?: string
 
@@ -415,26 +399,6 @@ export interface FilterablePaymentProps
    * Filter the payments by the ID of their associated payment session.
    */
   payment_session_id?: string | string[] | OperatorMap<string>
-
-  /**
-   * Filter the payments by the ID of their associated customer.
-   */
-  customer_id?: string | string[] | OperatorMap<string>
-
-  /**
-   * Filter the payments by the ID of their associated cart.
-   */
-  cart_id?: string | string[] | OperatorMap<string>
-
-  /**
-   * Filter the payments by the ID of their associated order.
-   */
-  order_id?: string | string[] | OperatorMap<string>
-
-  /**
-   * Filter the payments by the ID of their associated order edit.
-   */
-  order_edit_id?: string | string[] | OperatorMap<string>
 
   /**
    * Filter the payments by their creation date.
@@ -682,4 +646,63 @@ export interface RefundReasonDTO {
    * When the refund reason was updated
    */
   updated_at: Date | string
+}
+
+export interface PaymentMethodDTO {
+  /**
+   * The ID of the payment method.
+   */
+  id: string
+
+  /**
+   * The data of the payment method, as returned by the payment provider.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * The ID of the associated payment provider.
+   */
+  provider_id: string
+}
+
+export interface AccountHolderDTO {
+  /**
+   * The ID of the account holder.
+   */
+  id: string
+
+  /**
+   * The ID of the associated payment provider.
+   */
+  provider_id: string
+
+  /**
+   * The external ID of the account holder in the payment provider system.
+   */
+  external_id: string
+
+  /**
+   * The email of the account holder.
+   */
+  email: string | null
+
+  /**
+   * The data of the account holder, as returned by the payment provider.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * When the account holder was created.
+   */
+  created_at?: string | Date | null
+
+  /**
+   * When the account holder was updated.
+   */
+  updated_at?: string | Date | null
+
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: Record<string, unknown> | null
 }

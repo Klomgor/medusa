@@ -3,6 +3,7 @@ import {
   createOrderShipmentWorkflow,
   createShippingOptionsWorkflow,
 } from "@medusajs/core-flows"
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   FulfillmentWorkflow,
   IOrderModuleService,
@@ -20,7 +21,6 @@ import {
   RuleOperator,
   remoteQueryObjectFromString,
 } from "@medusajs/utils"
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 
 jest.setTimeout(500000)
 
@@ -126,6 +126,17 @@ async function prepareDataFixtures({ container }) {
 
   await remoteLink.create([
     {
+      [Modules.PRODUCT]: {
+        product_id: product.id,
+      },
+      [Modules.FULFILLMENT]: {
+        shipping_profile_id: shippingProfile.id,
+      },
+    },
+  ])
+
+  await remoteLink.create([
+    {
       [Modules.STOCK_LOCATION]: {
         stock_location_id: location.id,
       },
@@ -177,7 +188,7 @@ async function prepareDataFixtures({ container }) {
         {
           attribute: "is_return",
           operator: RuleOperator.EQ,
-          value: '"true"',
+          value: "true",
         },
       ],
     }

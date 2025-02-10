@@ -1,11 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { HttpTypes } from "@medusajs/types"
-import { Button, Input, RadioGroup, toast } from "@medusajs/ui"
+import { Button, Divider, Input, RadioGroup, toast } from "@medusajs/ui"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod"
 
-import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
 import { SwitchBox } from "../../../../../components/common/switch-box"
 import { Combobox } from "../../../../../components/inputs/combobox"

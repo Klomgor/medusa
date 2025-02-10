@@ -89,8 +89,26 @@ export type AdminOptions = {
   /**
    * Configure the Vite configuration for the admin dashboard. This function receives the default Vite configuration
    * and returns the modified configuration. The default value is `undefined`.
+   * 
+   * Learn about configurations you can pass to Vite in [Vite's documentation](https://vite.dev/config/).
    *
-   * @privateRemarks TODO Add example
+   * @example
+   * For example, if you're using a third-party library that isn't ESM-compatible, add it to Vite's `optimizeDeps` configuration:
+   * 
+   * ```ts title="medusa-config.ts"
+   * module.exports = defineConfig({
+   *   admin: {
+   *     vite: () => {
+   *       return {
+   *         optimizeDeps: {
+   *           include: ["qs"],
+   *         },
+   *       };
+   *     },
+   *   },
+   *   // ...
+   * })
+   * ```
    */
   vite?: (config: InlineConfig) => InlineConfig
 }
@@ -764,6 +782,7 @@ export type ProjectConfigOptions = {
  * `defineConfig` accepts as a parameter an object with the following properties:
  *
  * - {@link ConfigModule.projectConfig | projectConfig} (required): An object that holds general configurations related to the Medusa application, such as database or CORS configurations.
+ * - {@link ConfigModule.plugins | plugins}: An array of strings or objects that hold the configurations of the plugins installed in the Medusa application.
  * - {@link ConfigModule.admin | admin}: An object that holds admin-related configurations.
  * - {@link ConfigModule.modules | modules}: An object that configures the Medusa application's modules.
  * - {@link ConfigModule.featureFlags | featureFlags}: An object that enables or disables features guarded by a feature flag.
@@ -821,17 +840,19 @@ export type ConfigModule = {
   admin?: AdminOptions
 
   /**
-   * On your Medusa backend, you can use [Plugins](https://docs.medusajs.com/development/plugins/overview) to add custom features or integrate third-party services.
-   * For example, installing a plugin to use Stripe as a payment processor.
+   * On your Medusa server, you can use [Plugins](https://docs.medusajs.com/learn/fundamentals/plugins) to add re-usable Medusa customizations. Plugins
+   * can include modules, workflows, API Routes, and other customizations. Plugins are available starting from [Medusa v2.3.0](https://github.com/medusajs/medusa/releases/tag/v2.3.0).
    *
    * Aside from installing the plugin with NPM, you need to pass the plugin you installed into the `plugins` array defined in `medusa-config.ts`.
    *
    * The items in the array can either be:
    *
-   * - A string, which is the name of the plugin to add. You can pass a plugin as a string if it doesn’t require any configurations.
+   * - A string, which is the name of the plugin's package as specified in the plugin's `package.json` file. You can pass a plugin as a string if it doesn’t require any options.
    * - An object having the following properties:
-   *     - `resolve`: The name of the plugin.
-   *     - `options`: An object that includes the plugin’s options. These options vary for each plugin, and you should refer to the plugin’s documentation for available options.
+   *     - `resolve`: The name of the plugin's package as specified in the plugin's `package.json` file.
+   *     - `options`: An object that includes options to be passed to the modules within the plugin. Learn more in [this documentation](https://docs.medusajs.com/learn/fundamentals/modules/options).
+   * 
+   * Learn how to create a plugin in [this documentation](https://docs.medusajs.com/learn/fundamentals/plugins/create).
    *
    * @example
    * ```ts title="medusa-config.ts"
@@ -850,15 +871,17 @@ export type ConfigModule = {
    *   // ...
    * }
    * ```
-   *
-   * @ignore
-   *
-   * @privateRemarks
-   * Added the `@\ignore` tag for now so it's not generated in the main docs until we figure out what to do with plugins
    */
   plugins: (
     | {
+      /**
+       * The name of the plugin's package as specified in the plugin's `package.json` file.
+       */
         resolve: string
+        /**
+         * An object that includes options to be passed to the modules within the plugin.
+         * Learn more in [this documentation](https://docs.medusajs.com/learn/fundamentals/modules/options).
+         */
         options: Record<string, unknown>
       }
     | string

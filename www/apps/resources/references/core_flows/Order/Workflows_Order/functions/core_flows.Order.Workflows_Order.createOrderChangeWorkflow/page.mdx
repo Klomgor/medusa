@@ -1,6 +1,7 @@
 ---
 slug: /references/medusa-workflows/createOrderChangeWorkflow
 sidebar_label: createOrderChangeWorkflow
+sidebar_description: Create an order change.
 tags:
   - order
   - workflow
@@ -14,7 +15,10 @@ This documentation provides a reference to the `createOrderChangeWorkflow`. It b
 
 This workflow creates an order change.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/create-order-change.ts#L13" />
+You can use this workflow within your customizations or your own custom workflows, allowing you to wrap custom logic around 
+creating an order change.
+
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/core/core-flows/src/order/workflows/create-order-change.ts#L20" />
 
 ## Examples
 
@@ -35,7 +39,7 @@ export async function POST(
   const { result } = await createOrderChangeWorkflow(req.scope)
     .run({
       input: {
-        "order_id": "{value}"
+        "order_id": "order_123"
       }
     })
 
@@ -60,7 +64,7 @@ export default async function handleOrderPlaced({
   const { result } = await createOrderChangeWorkflow(container)
     .run({
       input: {
-        "order_id": "{value}"
+        "order_id": "order_123"
       }
     })
 
@@ -85,7 +89,7 @@ export default async function myCustomJob(
   const { result } = await createOrderChangeWorkflow(container)
     .run({
       input: {
-        "order_id": "{value}"
+        "order_id": "order_123"
       }
     })
 
@@ -111,7 +115,7 @@ const myWorkflow = createWorkflow(
     const result = createOrderChangeWorkflow
       .runAsStep({
         input: {
-          "order_id": "{value}"
+          "order_id": "order_123"
         }
       })
   }
@@ -123,7 +127,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createOrderChangeWorkflow","steps":[{"type":"step","name":"createOrderChangeStep","description":"This step creates an order change.\n\n","link":"../../../Steps_Order/functions/core_flows.Order.Steps_Order.createOrderChangeStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"createOrderChangeWorkflow","steps":[{"type":"step","name":"createOrderChangeStep","description":"This step creates an order change.","link":"../../../Steps_Order/functions/core_flows.Order.Steps_Order.createOrderChangeStep/page.mdx","depth":1}]}} />
 
 ## Input
 

@@ -11,6 +11,10 @@ export interface AdminUpdateOrder {
    * The order's billing address.
    */
   billing_address?: OrderAddress
+  /**
+   * The order's metadata.
+   */
+  metadata?: Record<string, unknown> | null
 }
 
 export interface AdminCreateOrderFulfillment {
@@ -32,6 +36,11 @@ export interface AdminCreateOrderFulfillment {
    * to fulfill the items from.
    */
   location_id?: string
+  /**
+   * The ID of the shipping option to use for the fulfillment.
+   * Overrides the shipping option selected by the customer.
+   */
+  shipping_option_id?: string
   /**
    * Whether to notify the customer about this change.
    */
@@ -89,8 +98,6 @@ export interface AdminCancelOrderFulfillment {
    */
   no_notification?: boolean
 }
-
-export interface AdminMarkOrderFulfillmentAsDelivered {}
 
 export interface AdminRequestOrderTransfer {
   customer_id: string

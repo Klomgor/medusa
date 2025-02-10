@@ -12,9 +12,9 @@ import {
   Modules,
   TransactionHandlerType,
 } from "@medusajs/framework/utils"
+import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { WorkflowsModuleService } from "@services"
 import { asFunction } from "awilix"
-import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { setTimeout as setTimeoutPromise } from "timers/promises"
 import "../__fixtures__"
 import {
@@ -332,27 +332,23 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
       describe("Scheduled workflows", () => {
         beforeEach(() => {
+          jest.useFakeTimers()
           jest.clearAllMocks()
         })
 
-        beforeAll(() => {
-          jest.useFakeTimers()
-          jest.spyOn(global, "setTimeout")
-        })
-
-        afterAll(() => {
+        afterEach(() => {
           jest.useRealTimers()
         })
 
         it("should execute a scheduled workflow", async () => {
-          const spy = createScheduled("standard")
+          const spy = createScheduled("standard", {
+            cron: "0 0 * * * *", // Jest issue: clearExpiredExecutions runs every hour, this is scheduled to run every hour to match the number of calls
+          })
 
           await jest.runOnlyPendingTimersAsync()
-          expect(setTimeout).toHaveBeenCalledTimes(2)
           expect(spy).toHaveBeenCalledTimes(1)
 
           await jest.runOnlyPendingTimersAsync()
-          expect(setTimeout).toHaveBeenCalledTimes(3)
           expect(spy).toHaveBeenCalledTimes(2)
         })
 

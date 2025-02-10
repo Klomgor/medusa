@@ -1,5 +1,26 @@
 # @medusajs/pricing
 
+## 2.4.0
+
+### Minor Changes
+
+- [#10292](https://github.com/medusajs/medusa/pull/10292) [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: upgrade to mikro-orm 6
+
+### Patch Changes
+
+- Updated dependencies [[`0deffe7b9b9a1055813249b17057b7bba01b78ac`](https://github.com/medusajs/medusa/commit/0deffe7b9b9a1055813249b17057b7bba01b78ac), [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547), [`13fe2f6776b22c401d131f184fc3600ef4008383`](https://github.com/medusajs/medusa/commit/13fe2f6776b22c401d131f184fc3600ef4008383), [`e53b8b0a9708d2eb46258ca417b6ff6abbd5f3d9`](https://github.com/medusajs/medusa/commit/e53b8b0a9708d2eb46258ca417b6ff6abbd5f3d9)]:
+  - @medusajs/framework@2.4.0
+
+## 2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10896](https://github.com/medusajs/medusa/pull/10896) [`3fec01ab494dcd91ee5b2f17597e24e653ddc801`](https://github.com/medusajs/medusa/commit/3fec01ab494dcd91ee5b2f17597e24e653ddc801) Thanks [@riqwan](https://github.com/riqwan)! - fix(pricing): add null conditions for deleted at during price calculations
+
+- [#10882](https://github.com/medusajs/medusa/pull/10882) [`a625bce7b022c28a256f81777b7ebab15ab1d930`](https://github.com/medusajs/medusa/commit/a625bce7b022c28a256f81777b7ebab15ab1d930) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(pricing): PriceLists of type Sale no longer override default prices when the price list price is higher than the default price.
+
 ## 2.2.0
 
 ### Patch Changes

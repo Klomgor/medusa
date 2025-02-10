@@ -169,7 +169,7 @@ export const storefrontGuidesSidebar = [
       {
         type: "link",
         path: "/storefront-development/checkout/address",
-        title: "2. Enter Address",
+        title: "2. Set Address",
       },
       {
         type: "link",

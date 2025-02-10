@@ -1,5 +1,6 @@
 import {
-  PaymentProviderContext,
+  AccountHolderDTO,
+  CustomerDTO,
   PaymentSessionDTO,
 } from "@medusajs/framework/types"
 import {
@@ -8,21 +9,66 @@ import {
   createWorkflow,
   parallelize,
   transform,
+  when,
 } from "@medusajs/framework/workflows-sdk"
-import { useRemoteQueryStep } from "../../common"
-import { createPaymentSessionStep } from "../steps"
+import { createRemoteLinkStep, useRemoteQueryStep } from "../../common"
+import {
+  createPaymentSessionStep,
+  createPaymentAccountHolderStep,
+} from "../steps"
 import { deletePaymentSessionsWorkflow } from "./delete-payment-sessions"
+import { isPresent, Modules } from "@medusajs/framework/utils"
 
+/**
+ * The data to create payment sessions.
+ */
 export interface CreatePaymentSessionsWorkflowInput {
+  /**
+   * The ID of the payment collection to create payment sessions for.
+   */
   payment_collection_id: string
+  /**
+   * The ID of the payment provider that the payment sessions are associated with.
+   * This provider is used to later process the payment sessions and their payments.
+   */
   provider_id: string
+  /**
+   * The ID of the customer that the payment session should be associated with.
+   */
+  customer_id?: string
+  /**
+   * Custom data relevant for the payment provider to process the payment session.
+   * Learn more in [this documentation](https://docs.medusajs.com/resources/commerce-modules/payment/payment-session#data-property).
+   */
   data?: Record<string, unknown>
-  context?: PaymentProviderContext
+
+  /**
+   * Additional context that's useful for the payment provider to process the payment session.
+   * Currently all of the context is calculated within the workflow.
+   */
+  context?: Record<string, unknown>
 }
 
 export const createPaymentSessionsWorkflowId = "create-payment-sessions"
 /**
- * This workflow creates payment sessions.
+ * This workflow creates payment sessions. It's used by the
+ * [Initialize Payment Session Store API Route](https://docs.medusajs.com/api/store#payment-collections_postpaymentcollectionsidpaymentsessions).
+ *
+ * You can use this workflow within your own customizations or custom workflows, allowing you
+ * to create payment sessions in your custom flows.
+ *
+ * @example
+ * const { result } = await createPaymentSessionsWorkflow(container)
+ * .run({
+ *   input: {
+ *     payment_collection_id: "paycol_123",
+ *     provider_id: "pp_system"
+ *   }
+ * })
+ *
+ * @summary
+ *
+ * Create payment sessions.
  */
 export const createPaymentSessionsWorkflow = createWorkflow(
   createPaymentSessionsWorkflowId,
@@ -34,16 +80,89 @@ export const createPaymentSessionsWorkflow = createWorkflow(
       fields: ["id", "amount", "currency_code", "payment_sessions.*"],
       variables: { id: input.payment_collection_id },
       list: false,
+    }).config({ name: "get-payment-collection" })
+
+    const { paymentCustomer, accountHolder } = when(
+      "customer-id-exists",
+      { input },
+      (data) => {
+        return !!data.input.customer_id
+      }
+    ).then(() => {
+      const customer: CustomerDTO & { account_holder: AccountHolderDTO } =
+        useRemoteQueryStep({
+          entry_point: "customer",
+          fields: [
+            "id",
+            "email",
+            "company_name",
+            "first_name",
+            "last_name",
+            "phone",
+            "addresses.*",
+            "account_holder.*",
+            "metadata",
+          ],
+          variables: { id: input.customer_id },
+          list: false,
+        }).config({ name: "get-customer" })
+
+      const paymentCustomer = transform({ customer }, (data) => {
+        return {
+          ...data.customer,
+          billing_address:
+            data.customer.addresses?.find((a) => a.is_default_billing) ??
+            data.customer.addresses?.[0],
+        }
+      })
+
+      const accountHolderInput = {
+        provider_id: input.provider_id,
+        context: {
+          // The module is idempotent, so if there already is a linked account holder, the module will simply return it back.
+          account_holder: customer.account_holder,
+          customer: paymentCustomer,
+        },
+      }
+
+      const accountHolder = createPaymentAccountHolderStep(accountHolderInput)
+      return { paymentCustomer, accountHolder }
+    })
+
+    when(
+      "account-holder-created",
+      { paymentCustomer, accountHolder },
+      (data) => {
+        return (
+          !isPresent(data.paymentCustomer?.account_holder) &&
+          isPresent(data.accountHolder)
+        )
+      }
+    ).then(() => {
+      createRemoteLinkStep([
+        {
+          [Modules.CUSTOMER]: {
+            customer_id: paymentCustomer.id,
+          },
+          [Modules.PAYMENT]: {
+            account_holder_id: accountHolder.id,
+          },
+        },
+      ])
     })
 
     const paymentSessionInput = transform(
-      { paymentCollection, input },
+      { paymentCollection, paymentCustomer, accountHolder, input },
       (data) => {
         return {
           payment_collection_id: data.input.payment_collection_id,
           provider_id: data.input.provider_id,
           data: data.input.data,
-          context: data.input.context,
+          context: {
+            ...data.input.context,
+            customer: data.paymentCustomer,
+            account_holder: data.accountHolder,
+          },
           amount: data.paymentCollection.amount,
           currency_code: data.paymentCollection.currency_code,
         }

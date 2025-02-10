@@ -1,5 +1,59 @@
 # @medusajs/dashboard
 
+## 2.4.0
+
+### Minor Changes
+
+- [#10757](https://github.com/medusajs/medusa/pull/10757) [`5ff45f27a107da48c943a9c502e15555f66d8722`](https://github.com/medusajs/medusa/commit/5ff45f27a107da48c943a9c502e15555f66d8722) Thanks [@leosin](https://github.com/leosin)! - Added Simplified Chinese (zhCN) translations to admin dashboard
+
+### Patch Changes
+
+- [#10964](https://github.com/medusajs/medusa/pull/10964) [`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,js-sdk,types): Remove redundant body for markAsDelivered
+
+- [#11107](https://github.com/medusajs/medusa/pull/11107) [`4eecda5466c4b82eadc7447d4de80f0d2663d668`](https://github.com/medusajs/medusa/commit/4eecda5466c4b82eadc7447d4de80f0d2663d668) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Format i18n schema with Prettier
+
+- [#11058](https://github.com/medusajs/medusa/pull/11058) [`6346836c2d2e9830f60a3e583191555e3f10dd6d`](https://github.com/medusajs/medusa/commit/6346836c2d2e9830f60a3e583191555e3f10dd6d) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(dashboard): Refactor Users table to use the new DataTable block
+
+- [#11074](https://github.com/medusajs/medusa/pull/11074) [`c400719fcc8ae04ba95a15ef9e6f583969e6c0b0`](https://github.com/medusajs/medusa/commit/c400719fcc8ae04ba95a15ef9e6f583969e6c0b0) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Persist variant_rank
+
+- [#11073](https://github.com/medusajs/medusa/pull/11073) [`83c91f118621dd39691bad0d672015a3a80d1cce`](https://github.com/medusajs/medusa/commit/83c91f118621dd39691bad0d672015a3a80d1cce) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Use date util to properly format date in order details view
+
+- [#10981](https://github.com/medusajs/medusa/pull/10981) [`0bef3202f3393ed35bddb7278d51f95ec314fcba`](https://github.com/medusajs/medusa/commit/0bef3202f3393ed35bddb7278d51f95ec314fcba) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Add global errorElement
+
+- [#10024](https://github.com/medusajs/medusa/pull/10024) [`147c0e5a353b57d3a17db3b572334db58c830b3c`](https://github.com/medusajs/medusa/commit/147c0e5a353b57d3a17db3b572334db58c830b3c) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(ui,dashboard): Add new DataTable block
+
+- Updated dependencies [[`7feb004600fdbf8bf32b13695fd7f41229d43b52`](https://github.com/medusajs/medusa/commit/7feb004600fdbf8bf32b13695fd7f41229d43b52), [`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2), [`147c0e5a353b57d3a17db3b572334db58c830b3c`](https://github.com/medusajs/medusa/commit/147c0e5a353b57d3a17db3b572334db58c830b3c)]:
+  - @medusajs/ui@4.0.4
+  - @medusajs/js-sdk@2.4.0
+  - @medusajs/admin-shared@2.4.0
+  - @medusajs/icons@2.4.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.3.1
+  - @medusajs/js-sdk@2.3.1
+  - @medusajs/icons@2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10888](https://github.com/medusajs/medusa/pull/10888) [`1758bfb8d042fa9fc82f23c36ccd61e4a439448e`](https://github.com/medusajs/medusa/commit/1758bfb8d042fa9fc82f23c36ccd61e4a439448e) Thanks [@riqwan](https://github.com/riqwan)! - fix(dashboard, core-flows): improvements to order page on canceled orders
+
+- [#10950](https://github.com/medusajs/medusa/pull/10950) [`5eab9e739919594ae7e7e416942ec93d84b699fd`](https://github.com/medusajs/medusa/commit/5eab9e739919594ae7e7e416942ec93d84b699fd) Thanks [@riqwan](https://github.com/riqwan)! - feat(promotion,dashboard,types,utils,medusa): Add statuses to promotions
+
+- [#10630](https://github.com/medusajs/medusa/pull/10630) [`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(inventory,dashboard,core-flows,js-sdk,types,medusa): Improve inventory management UX
+
+- [#10961](https://github.com/medusajs/medusa/pull/10961) [`2a25b4d95f2b7a4d53138718c94124f47f041b36`](https://github.com/medusajs/medusa/commit/2a25b4d95f2b7a4d53138718c94124f47f041b36) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - chore(icons,dashboard): Pull latest icons and update branch icon in category tree
+
+- Updated dependencies [[`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c), [`2a25b4d95f2b7a4d53138718c94124f47f041b36`](https://github.com/medusajs/medusa/commit/2a25b4d95f2b7a4d53138718c94124f47f041b36)]:
+  - @medusajs/js-sdk@2.3.0
+  - @medusajs/icons@2.3.0
+  - @medusajs/admin-shared@2.3.0
+
 ## 2.2.0
 
 ### Patch Changes

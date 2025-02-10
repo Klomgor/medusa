@@ -12,19 +12,27 @@ In this chapter, you'll find some tips for your admin development.
 
 To send a request to an API route in the Medusa Application, use Medusa's [JS SDK](!resources!/js-sdk) with [Tanstack Query](https://tanstack.com/query/latest). Both of these tools are installed in your project by default.
 
+<Note type="warning">
+
+Do not install Tanstack Query as that will cause unexpected errors in your development. If you prefer installing it for better auto-completion in your code editor, make sure to install `v5.64.2` as a development dependency.
+
+</Note>
+
 First, create the file `src/admin/lib/config.ts` to setup the SDK for use in your customizations:
 
 ```ts
 import Medusa from "@medusajs/js-sdk"
 
 export const sdk = new Medusa({
-  baseUrl: "http://localhost:9000",
-  debug: process.env.NODE_ENV === "development",
+  baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+  debug: import.meta.env.DEV,
   auth: {
     type: "session",
   },
 })
 ```
+
+Notice that you use `import.meta.env` to access environment variables in your customizations, as explained in [this chapter](../environment-variables/page.mdx).
 
 <Note>
 

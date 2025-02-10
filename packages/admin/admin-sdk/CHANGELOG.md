@@ -1,5 +1,26 @@
 # @medusajs/admin-sdk
 
+## 2.4.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.4.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.3.0
+
 ## 2.2.0
 
 ### Patch Changes

@@ -1,9 +1,9 @@
-import { join } from "path"
-import { glob } from "glob"
-import { logger } from "../logger"
 import { MedusaContainer } from "@medusajs/types"
-import { ContainerRegistrationKeys } from "../utils"
 import { Knex } from "@mikro-orm/knex"
+import { glob } from "glob"
+import { join } from "path"
+import { logger } from "../logger"
+import { ContainerRegistrationKeys } from "../utils"
 
 export abstract class Migrator {
   protected abstract migration_table_name: string
@@ -97,8 +97,13 @@ export abstract class Migrator {
       await this.pgConnection.raw(
         `INSERT INTO ${this.migration_table_name} (${columns.join(
           ", "
-        )}) VALUES (${new Array(values.length).fill("?").join(",")})`,
-        values
+        )}) VALUES ${values
+          .map(
+            (itemValues) =>
+              `(${new Array(itemValues.length).fill("?").join(",")})`
+          )
+          .join(",")}`,
+        values.flat()
       )
     } catch (error) {
       logger.error(
@@ -132,7 +137,7 @@ export abstract class Migrator {
       try {
         const scriptFiles = glob.sync("*.{js,ts}", {
           cwd: basePath,
-          ignore: ["**/index.{js,ts}"],
+          ignore: ["**/index.{js,ts}", "**/*.d.ts"],
         })
 
         if (!scriptFiles?.length) {

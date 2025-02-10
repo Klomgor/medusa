@@ -1,23 +1,22 @@
 import { Spinner } from "@medusajs/icons"
-import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "cva"
+import { Slot } from "radix-ui"
 import * as React from "react"
 
 import { clx } from "@/utils/clx"
 
 const iconButtonVariants = cva({
   base: clx(
-    "transition-fg relative inline-flex w-fit items-center justify-center overflow-hidden rounded-md outline-none",
-    "disabled:bg-ui-bg-disabled disabled:shadow-buttons-neutral disabled:text-ui-fg-disabled disabled:after:hidden"
+    "transition-fg inline-flex w-fit items-center justify-center overflow-hidden rounded-md outline-none",
+    "disabled:bg-ui-bg-disabled disabled:shadow-buttons-neutral disabled:text-ui-fg-disabled "
   ),
   variants: {
     variant: {
       primary: clx(
-        "shadow-buttons-neutral text-ui-fg-subtle bg-ui-button-neutral after:button-neutral-gradient",
-        "hover:bg-ui-button-neutral-hover hover:after:button-neutral-hover-gradient",
-        "active:bg-ui-button-neutral-pressed active:after:button-neutral-pressed-gradient",
-        "focus-visible:shadow-buttons-neutral-focus",
-        "after:absolute after:inset-0 after:content-['']"
+        "shadow-buttons-neutral text-ui-fg-subtle bg-ui-button-neutral",
+        "hover:bg-ui-button-neutral-hover",
+        "active:bg-ui-button-neutral-pressed",
+        "focus-visible:shadow-buttons-neutral-focus"
       ),
       transparent: clx(
         "text-ui-fg-subtle bg-ui-button-transparent",
@@ -79,7 +78,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     }: IconButtonProps,
     ref
   ) => {
-    const Component = asChild ? Slot : "button"
+    const Component = asChild ? Slot.Root : "button"
 
     /**
      * In the case of a button where asChild is true, and isLoading is true, we ensure that

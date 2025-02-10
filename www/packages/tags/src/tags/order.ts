@@ -136,10 +136,6 @@ export const order = [
     "path": "/references/medusa-workflows/steps/updateOrderChangesStep"
   },
   {
-    "title": "updateOrderExchangesStep",
-    "path": "/references/medusa-workflows/steps/updateOrderExchangesStep"
-  },
-  {
     "title": "updateOrderShippingMethodsStep",
     "path": "/references/medusa-workflows/steps/updateOrderShippingMethodsStep"
   },

@@ -1,10 +1,18 @@
 ---
 slug: /references/medusa-workflows/transferCartCustomerWorkflow
 sidebar_label: transferCartCustomerWorkflow
+sidebar_description: Refresh a cart's payment collection details.
 tags:
   - query
   - cart
   - workflow
+  - remote query
+  - fulfillment
+  - tax
+  - promotion
+  - link
+  - payment
+  - logger
 ---
 
 import { TypeList, WorkflowDiagram } from "docs-ui"
@@ -13,9 +21,13 @@ import { TypeList, WorkflowDiagram } from "docs-ui"
 
 This documentation provides a reference to the `transferCartCustomerWorkflow`. It belongs to the `@medusajs/medusa/core-flows` package.
 
-This workflow transfers cart's customer.
+This workflow transfers a cart's customer ownership to another customer. It's useful if a customer logs in after
+adding the items to their cart, allowing you to transfer the cart's ownership to the logged-in customer. This workflow is used
+by the [Set Cart's Customer Store API Route](https://docs.medusajs.com/api/store#carts\_postcartsidcustomer).
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/cart/workflows/transfer-cart-customer.ts#L15" />
+You can use this workflow within your own customizations or custom workflows, allowing you to set the cart's customer within your custom flows.
+
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/core/core-flows/src/cart/workflows/transfer-cart-customer.ts#L50" />
 
 ## Examples
 
@@ -36,8 +48,8 @@ export async function POST(
   const { result } = await transferCartCustomerWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_2QsAtdSaG9b4ARfkN",
-        "customer_id": "{value}"
+        id: "cart_123",
+        customer_id: "cus_123"
       }
     })
 
@@ -62,8 +74,8 @@ export default async function handleOrderPlaced({
   const { result } = await transferCartCustomerWorkflow(container)
     .run({
       input: {
-        "id": "id_2QsAtdSaG9b4ARfkN",
-        "customer_id": "{value}"
+        id: "cart_123",
+        customer_id: "cus_123"
       }
     })
 
@@ -88,8 +100,8 @@ export default async function myCustomJob(
   const { result } = await transferCartCustomerWorkflow(container)
     .run({
       input: {
-        "id": "id_2QsAtdSaG9b4ARfkN",
-        "customer_id": "{value}"
+        id: "cart_123",
+        customer_id: "cus_123"
       }
     })
 
@@ -115,8 +127,8 @@ const myWorkflow = createWorkflow(
     const result = transferCartCustomerWorkflow
       .runAsStep({
         input: {
-          "id": "id_2QsAtdSaG9b4ARfkN",
-          "customer_id": "{value}"
+          id: "cart_123",
+          customer_id: "cus_123"
         }
       })
   }
@@ -128,8 +140,36 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"transferCartCustomerWorkflow","steps":[{"type":"step","name":"useQueryGraphStep","description":"This step fetches data across modules using the Query.\n\nLearn more in the [Query documentation](https://docs.medusajs.com/learn/fundamentals/module-links/query).\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.useQueryGraphStep/page.mdx","depth":1},{"type":"step","name":"useQueryGraphStep","description":"This step fetches data across modules using the Query.\n\nLearn more in the [Query documentation](https://docs.medusajs.com/learn/fundamentals/module-links/query).\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.useQueryGraphStep/page.mdx","depth":2},{"type":"when","condition":"shouldTransfer","depth":"3","steps":[{"type":"step","name":"updateCartsStep","description":"This step updates a cart.\n\n","link":"../../../Steps_Cart/functions/core_flows.Cart.Steps_Cart.updateCartsStep/page.mdx","depth":3}]}]}} />
+<WorkflowDiagram workflow={{"name":"transferCartCustomerWorkflow","steps":[{"type":"step","name":"useQueryGraphStep","description":"This step fetches data across modules using the Query.\n\nLearn more in the [Query documentation](https://docs.medusajs.com/learn/fundamentals/module-links/query).","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.useQueryGraphStep/page.mdx","depth":1},{"type":"hook","name":"validate","description":"This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.","link":"#validate","depth":2},{"type":"step","name":"useQueryGraphStep","description":"This step fetches data across modules using the Query.\n\nLearn more in the [Query documentation](https://docs.medusajs.com/learn/fundamentals/module-links/query).","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.useQueryGraphStep/page.mdx","depth":3},{"type":"when","condition":"shouldTransfer","depth":"4","steps":[{"type":"step","name":"updateCartsStep","description":"This step updates a cart.","link":"../../../Steps_Cart/functions/core_flows.Cart.Steps_Cart.updateCartsStep/page.mdx","depth":4},{"type":"workflow","name":"refreshCartItemsWorkflow","description":"Refresh a cart's details after an update.","link":"../core_flows.Cart.Workflows_Cart.refreshCartItemsWorkflow/page.mdx","depth":4}]}]}} />
 
 ## Input
 
-<TypeList types={[{"name":"id","type":"`string`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"customer_id","type":"`string`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="transferCartCustomerWorkflow"/>
+<TypeList types={[{"name":"TransferCartCustomerWorkflowInput","type":"[TransferCartCustomerWorkflowInput](../../../../types/core_flows.TransferCartCustomerWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"The cart ownership transfer details.","expandable":false,"children":[{"name":"id","type":"`string`","description":"The cart's ID.","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"customer_id","type":"`string`","description":"The ID of the customer to transfer the cart to.","optional":false,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="transferCartCustomerWorkflow"/>
+
+## Hooks
+
+Hooks allow you to inject custom functionalities into the workflow. You'll receive data from the workflow, as well as additional data sent through an HTTP request.
+
+Learn more about [Hooks](https://docs.medusajs.com/learn/fundamentals/workflows/workflow-hooks) and [Additional Data](https://docs.medusajs.com/learn/fundamentals/api-routes/additional-data).
+
+### validate
+
+This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
+
+#### Example
+
+```ts
+import { transferCartCustomerWorkflow } from "@medusajs/medusa/core-flows"
+
+transferCartCustomerWorkflow.hooks.validate(
+  (async ({ input, cart }, { container }) => {
+    //TODO
+  })
+)
+```
+
+#### Input
+
+Handlers consuming this hook accept the following input.
+
+<TypeList types={[{"name":"input","type":"object","description":"The input data for the hook.","optional":false,"defaultValue":"","expandable":false,"children":[{"name":"input","type":"[TransferCartCustomerWorkflowInput](../../../../types/core_flows.TransferCartCustomerWorkflowInput/page.mdx)","description":"The cart ownership transfer details.","optional":false,"defaultValue":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"The cart's ID.","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"customer_id","type":"`string`","description":"The ID of the customer to transfer the cart to.","optional":false,"defaultValue":"","expandable":false,"children":[]}]},{"name":"cart","type":"`any`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="validate"/>

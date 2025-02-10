@@ -1,10 +1,9 @@
-import { Heading, Input, RadioGroup, Select, Text } from "@medusajs/ui"
+import { Divider, Heading, Input, RadioGroup, Select, Text } from "@medusajs/ui"
 import { UseFormReturn } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
 import { HttpTypes } from "@medusajs/types"
 
-import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
 import { SwitchBox } from "../../../../../components/common/switch-box"
 import { Combobox } from "../../../../../components/inputs/combobox"

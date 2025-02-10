@@ -1,5 +1,30 @@
 # Change Log
 
+## 2.4.0
+
+### Patch Changes
+
+- [#11071](https://github.com/medusajs/medusa/pull/11071) [`cd758067d41ef29139c7dcdcc0639e9d9d520bd8`](https://github.com/medusajs/medusa/commit/cd758067d41ef29139c7dcdcc0639e9d9d520bd8) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(create-medusa-app): fix database name from input not used in setup
+
+- Updated dependencies []:
+  - @medusajs/telemetry@2.4.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/telemetry@2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10908](https://github.com/medusajs/medusa/pull/10908) [`c895ed8013fe2feae7b0a92a5d0aad937f58a08a`](https://github.com/medusajs/medusa/commit/c895ed8013fe2feae7b0a92a5d0aad937f58a08a) Thanks [@adrien2p](https://github.com/adrien2p)! - Feat/plugin scaffolding
+
+- Updated dependencies []:
+  - @medusajs/telemetry@2.3.0
+
 ## 2.2.0
 
 ### Patch Changes

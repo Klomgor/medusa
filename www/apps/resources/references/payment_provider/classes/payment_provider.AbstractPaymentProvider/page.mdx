@@ -10,9 +10,18 @@ In this document, you’ll learn how to create a Payment Provider to be used wit
 
 ---
 
-## 1. Create Module Directory
+## 1. Create Module Provider Directory
 
-Start by creating a new directory for your module. For example, `src/modules/my-payment`.
+Start by creating a new directory for your module provider.
+
+If you're creating the module provider in a Medusa application, create it under the `src/modules` directory. For example, `src/modules/my-payment`.
+If you're creating the module provider in a plugin, create it under the `src/providers` directory. For example, `src/providers/my-payment`.
+
+<Note>
+
+The rest of this guide always uses the `src/modules/my-payment` directory as an example.
+
+</Note>
 
 ---
 
@@ -38,7 +47,7 @@ export default MyPaymentProviderService
 
 ### constructor
 
-The constructor allows you to access resources from the [module's container](https://docs.medusajs.com/learn/fundamentals/modules/container) 
+The constructor allows you to access resources from the [module's container](https://docs.medusajs.com/learn/fundamentals/modules/container)
 using the first parameter, and the module's options using the second parameter.
 
 :::note
@@ -134,10 +143,6 @@ class MyPaymentProviderService extends AbstractPaymentProvider<Options> {
 #### Parameters
 
 <TypeList types={[{"name":"options","type":"`Record<any, any>`","description":"The provider's options.","optional":false,"defaultValue":"","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="validateOptions"/>
-
-#### Returns
-
-<TypeList types={[{"name":"void","type":"`void`","optional":false,"defaultValue":"","description":"This method validates the options of the provider set in `medusa-config.ts`.\nImplementing this method is optional. It's useful if your provider requires custom validation.\n\nIf the options aren't valid, throw an error.","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="validateOptions"/>
 
 ### capturePayment
 
@@ -746,6 +751,7 @@ module.exports = defineConfig({
       options: {
         providers: [
           {
+            // if module provider is in a plugin, use `plugin-name/providers/my-payment`
             resolve: "./src/modules/my-payment",
             id: "my-payment",
             options: {

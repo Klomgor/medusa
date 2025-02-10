@@ -1,8 +1,8 @@
-import { MedusaContainer } from "@medusajs/types"
-import { MigrationScriptsMigrator } from "../run-migration-scripts"
 import { jest } from "@jest/globals"
-import path from "path"
+import { MedusaContainer } from "@medusajs/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/utils"
+import path from "path"
+import { MigrationScriptsMigrator } from "../run-migration-scripts"
 
 const mockPgConnection = {
   raw: jest.fn(),
@@ -45,9 +45,6 @@ describe("MigrationScriptsMigrator", () => {
         .spyOn(migrator as any, "getPendingMigrations")
         .mockResolvedValue([scriptPath])
       jest
-        .spyOn(migrator as any, "insertMigration")
-        .mockResolvedValue(undefined)
-      jest
         .spyOn(migrator as any, "trackDuration")
         .mockReturnValue({ getSeconds: () => 1 })
 
@@ -63,13 +60,18 @@ describe("MigrationScriptsMigrator", () => {
 
       expect(mockScript).toHaveBeenCalled()
 
-      expect(mockPgConnection.raw).toHaveBeenCalledWith(
+      expect(mockPgConnection.raw).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining(
+          "INSERT INTO script_migrations (script_name) VALUES (?)"
+        ),
+        [path.basename(scriptPath)]
+      )
+      expect(mockPgConnection.raw).toHaveBeenNthCalledWith(
+        2,
         expect.stringContaining("UPDATE script_migrations"),
         [path.basename(scriptPath)]
       )
-      expect(migrator["insertMigration"]).toHaveBeenCalledWith([
-        { script_name: `'${path.basename(scriptPath)}'` },
-      ])
     })
 
     it("should handle failed migrations by cleaning up", async () => {
@@ -166,6 +168,31 @@ describe("MigrationScriptsMigrator", () => {
 
       expect(mockPgConnection.raw).toHaveBeenCalledWith(
         expect.stringContaining("CREATE TABLE IF NOT EXISTS script_migrations")
+      )
+    })
+  })
+
+  describe("loadMigrationFiles", () => {
+    it("should load migration files correctly", async () => {
+      const result = await migrator.loadMigrationFiles([
+        path.join(
+          __dirname,
+          "..",
+          "__fixtures__",
+          "project",
+          "migration-scripts"
+        ),
+      ])
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual(
+        path.join(
+          __dirname,
+          "..",
+          "__fixtures__",
+          "project",
+          "migration-scripts",
+          "test.ts"
+        )
       )
     })
   })

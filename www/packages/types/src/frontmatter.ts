@@ -5,5 +5,8 @@ export declare type FrontMatter = {
   sidebar_group_main?: boolean
   sidebar_position?: number
   sidebar_autogenerate_exclude?: boolean
+  sidebar_description?: string
   tags?: string[]
+  title?: string
+  description?: string
 }

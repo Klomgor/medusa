@@ -4,12 +4,14 @@ import {
   Context,
   CreateCaptureDTO,
   CreatePaymentCollectionDTO,
+  CreatePaymentMethodDTO,
   CreatePaymentSessionDTO,
   CreateRefundDTO,
+  AccountHolderDTO,
   DAL,
   FilterablePaymentCollectionProps,
+  FilterablePaymentMethodProps,
   FilterablePaymentProviderProps,
-  FilterablePaymentSessionProps,
   FindConfig,
   InferEntityType,
   InternalModuleDeclaration,
@@ -20,6 +22,7 @@ import {
   PaymentCollectionDTO,
   PaymentCollectionUpdatableFields,
   PaymentDTO,
+  PaymentMethodDTO,
   PaymentProviderDTO,
   PaymentSessionDTO,
   ProviderWebhookPayload,
@@ -28,13 +31,17 @@ import {
   UpdatePaymentCollectionDTO,
   UpdatePaymentDTO,
   UpdatePaymentSessionDTO,
+  CreateAccountHolderDTO,
   UpsertPaymentCollectionDTO,
   WebhookActionResult,
+  CreateAccountHolderOutput,
+  InitiatePaymentOutput,
 } from "@medusajs/framework/types"
 import {
   BigNumber,
   InjectManager,
   InjectTransactionManager,
+  isPresent,
   isString,
   MathBN,
   MedusaContext,
@@ -45,6 +52,7 @@ import {
   promiseAll,
 } from "@medusajs/framework/utils"
 import {
+  AccountHolder,
   Capture,
   Payment,
   PaymentCollection,
@@ -63,6 +71,7 @@ type InjectedDependencies = {
   refundService: ModulesSdkTypes.IMedusaInternalService<any>
   paymentSessionService: ModulesSdkTypes.IMedusaInternalService<any>
   paymentCollectionService: ModulesSdkTypes.IMedusaInternalService<any>
+  accountHolderService: ModulesSdkTypes.IMedusaInternalService<any>
   paymentProviderService: PaymentProviderService
 }
 
@@ -73,6 +82,7 @@ const generateMethodForModels = {
   Capture,
   Refund,
   RefundReason,
+  AccountHolder,
 }
 
 export default class PaymentModuleService
@@ -83,6 +93,7 @@ export default class PaymentModuleService
     Capture: { dto: CaptureDTO }
     Refund: { dto: RefundDTO }
     RefundReason: { dto: RefundReasonDTO }
+    AccountHolder: { dto: AccountHolderDTO }
   }>(generateMethodForModels)
   implements IPaymentModuleService
 {
@@ -104,6 +115,9 @@ export default class PaymentModuleService
     typeof PaymentCollection
   >
   protected paymentProviderService_: PaymentProviderService
+  protected accountHolderService_: ModulesSdkTypes.IMedusaInternalService<
+    typeof AccountHolder
+  >
 
   constructor(
     {
@@ -114,6 +128,7 @@ export default class PaymentModuleService
       paymentSessionService,
       paymentProviderService,
       paymentCollectionService,
+      accountHolderService,
     }: InjectedDependencies,
     protected readonly moduleDeclaration: InternalModuleDeclaration
   ) {
@@ -128,23 +143,27 @@ export default class PaymentModuleService
     this.paymentSessionService_ = paymentSessionService
     this.paymentProviderService_ = paymentProviderService
     this.paymentCollectionService_ = paymentCollectionService
+    this.accountHolderService_ = accountHolderService
   }
 
   __joinerConfig(): ModuleJoinerConfig {
     return joinerConfig
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createPaymentCollections(
     data: CreatePaymentCollectionDTO,
     sharedContext?: Context
   ): Promise<PaymentCollectionDTO>
 
+  // @ts-expect-error
   createPaymentCollections(
     data: CreatePaymentCollectionDTO[],
     sharedContext?: Context
   ): Promise<PaymentCollectionDTO[]>
   @InjectManager()
+
+  // @ts-expect-error
   async createPaymentCollections(
     data: CreatePaymentCollectionDTO | CreatePaymentCollectionDTO[],
     @MedusaContext() sharedContext?: Context
@@ -172,12 +191,13 @@ export default class PaymentModuleService
     return await this.paymentCollectionService_.create(data, sharedContext)
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updatePaymentCollections(
     paymentCollectionId: string,
     data: PaymentCollectionUpdatableFields,
     sharedContext?: Context
   ): Promise<PaymentCollectionDTO>
+  // @ts-expect-error
   updatePaymentCollections(
     selector: FilterablePaymentCollectionProps,
     data: PaymentCollectionUpdatableFields,
@@ -185,6 +205,7 @@ export default class PaymentModuleService
   ): Promise<PaymentCollectionDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updatePaymentCollections(
     idOrSelector: string | FilterablePaymentCollectionProps,
     data: PaymentCollectionUpdatableFields,
@@ -281,6 +302,7 @@ export default class PaymentModuleService
     sharedContext?: Context
   ): Promise<PaymentCollectionDTO[]>
 
+  // Should we remove this and use `updatePaymentCollections` instead?
   @InjectManager()
   async completePaymentCollections(
     paymentCollectionId: string | string[],
@@ -313,7 +335,7 @@ export default class PaymentModuleService
     @MedusaContext() sharedContext?: Context
   ): Promise<PaymentSessionDTO> {
     let paymentSession: InferEntityType<typeof PaymentSession> | undefined
-    let providerPaymentSession: Record<string, unknown> | undefined
+    let providerPaymentSession: InitiatePaymentOutput | undefined
 
     try {
       paymentSession = await this.createPaymentSession_(
@@ -325,7 +347,8 @@ export default class PaymentModuleService
       providerPaymentSession = await this.paymentProviderService_.createSession(
         input.provider_id,
         {
-          context: { ...input.context, session_id: paymentSession!.id },
+          context: input.context,
+          data: { ...input.data, session_id: paymentSession!.id },
           amount: input.amount,
           currency_code: input.currency_code,
         }
@@ -335,15 +358,14 @@ export default class PaymentModuleService
         await this.paymentSessionService_.update(
           {
             id: paymentSession!.id,
-            data: { ...input.data, ...providerPaymentSession },
+            data: { ...input.data, ...providerPaymentSession.data },
           },
           sharedContext
         )
       )[0]
     } catch (error) {
       if (providerPaymentSession) {
-        await this.paymentProviderService_.deleteSession({
-          provider_id: input.provider_id,
+        await this.paymentProviderService_.deleteSession(input.provider_id, {
           data: input.data,
         })
       }
@@ -393,6 +415,12 @@ export default class PaymentModuleService
       sharedContext
     )
 
+    await this.paymentProviderService_.updateSession(session.provider_id, {
+      data: data.data,
+      amount: data.amount,
+      currency_code: data.currency_code,
+    })
+
     const updated = await this.paymentSessionService_.update(
       {
         id: session.id,
@@ -417,8 +445,7 @@ export default class PaymentModuleService
       sharedContext
     )
 
-    await this.paymentProviderService_.deleteSession({
-      provider_id: session.provider_id,
+    await this.paymentProviderService_.deleteSession(session.provider_id, {
       data: session.data,
     })
 
@@ -457,11 +484,11 @@ export default class PaymentModuleService
     }
 
     let { data, status } = await this.paymentProviderService_.authorizePayment(
+      session.provider_id,
       {
-        provider_id: session.provider_id,
         data: session.data,
-      },
-      context
+        context,
+      }
     )
 
     if (
@@ -470,7 +497,7 @@ export default class PaymentModuleService
     ) {
       throw new MedusaError(
         MedusaError.Types.NOT_ALLOWED,
-        `Session: ${session.id} is not authorized with the provider.`
+        `Session: ${session.id} was not authorized with the provider.`
       )
     }
 
@@ -483,8 +510,7 @@ export default class PaymentModuleService
         sharedContext
       )
     } catch (error) {
-      await this.paymentProviderService_.cancelPayment({
-        provider_id: session.provider_id,
+      await this.paymentProviderService_.cancelPayment(session.provider_id, {
         data,
       })
 
@@ -496,17 +522,15 @@ export default class PaymentModuleService
       sharedContext
     )
 
-    return await this.retrievePayment(
-      payment.id,
-      { relations: ["payment_collection"] },
-      sharedContext
-    )
+    return await this.baseRepository_.serialize(payment, {
+      populate: true,
+    })
   }
 
   @InjectTransactionManager()
   async authorizePaymentSession_(
     session: InferEntityType<typeof PaymentSession>,
-    data: Record<string, unknown>,
+    data: Record<string, unknown> | undefined,
     status: PaymentSessionStatus,
     @MedusaContext() sharedContext?: Context
   ): Promise<InferEntityType<typeof Payment>> {
@@ -521,8 +545,11 @@ export default class PaymentModuleService
         id: session.id,
         data,
         status,
-        authorized_at:
-          status === PaymentSessionStatus.AUTHORIZED ? new Date() : null,
+        ...(session.authorized_at === null
+          ? {
+              authorized_at: new Date(),
+            }
+          : {}),
       },
       sharedContext
     )
@@ -550,38 +577,6 @@ export default class PaymentModuleService
   }
 
   @InjectManager()
-  // @ts-expect-error
-  async retrievePaymentSession(
-    id: string,
-    config: FindConfig<PaymentSessionDTO> = {},
-    @MedusaContext() sharedContext?: Context
-  ): Promise<PaymentSessionDTO> {
-    const session = await this.paymentSessionService_.retrieve(
-      id,
-      config,
-      sharedContext
-    )
-
-    return await this.baseRepository_.serialize(session)
-  }
-
-  @InjectManager()
-  // @ts-expect-error
-  async listPaymentSessions(
-    filters?: FilterablePaymentSessionProps,
-    config?: FindConfig<PaymentSessionDTO>,
-    sharedContext?: Context
-  ): Promise<PaymentSessionDTO[]> {
-    const sessions = await this.paymentSessionService_.list(
-      filters,
-      config,
-      sharedContext
-    )
-
-    return await this.baseRepository_.serialize<PaymentSessionDTO[]>(sessions)
-  }
-
-  @InjectManager()
   async updatePayment(
     data: UpdatePaymentDTO,
     @MedusaContext() sharedContext?: Context
@@ -592,13 +587,33 @@ export default class PaymentModuleService
     return await this.baseRepository_.serialize<PaymentDTO>(result[0])
   }
 
+  // TODO: This method should return a capture, not a payment
   @InjectManager()
   async capturePayment(
     data: CreateCaptureDTO,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<PaymentDTO> {
-    const { payment, isFullyCaptured, capture } = await this.capturePayment_(
+    const payment = await this.paymentService_.retrieve(
+      data.payment_id,
+      {
+        select: [
+          "id",
+          "data",
+          "provider_id",
+          "payment_collection_id",
+          "amount",
+          "raw_amount",
+          "captured_at",
+          "canceled_at",
+        ],
+        relations: ["captures.raw_amount"],
+      },
+      sharedContext
+    )
+
+    const { isFullyCaptured, capture } = await this.capturePayment_(
       data,
+      payment,
       sharedContext
     )
 
@@ -620,45 +635,20 @@ export default class PaymentModuleService
       sharedContext
     )
 
-    return await this.retrievePayment(
-      payment.id,
-      { relations: ["captures"] },
-      sharedContext
-    )
+    return await this.baseRepository_.serialize(payment, {
+      populate: true,
+    })
   }
 
   @InjectTransactionManager()
   private async capturePayment_(
     data: CreateCaptureDTO,
+    payment: InferEntityType<typeof Payment>,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<{
-    payment: InferEntityType<typeof Payment>
     isFullyCaptured: boolean
     capture?: InferEntityType<typeof Capture>
   }> {
-    const payment = await this.paymentService_.retrieve(
-      data.payment_id,
-      {
-        select: [
-          "id",
-          "data",
-          "provider_id",
-          "payment_collection_id",
-          "amount",
-          "raw_amount",
-          "captured_at",
-          "canceled_at",
-        ],
-        relations: ["captures.raw_amount"],
-      },
-      sharedContext
-    )
-
-    // If no custom amount is passed, we assume the full amount needs to be captured
-    if (!data.amount) {
-      data.amount = payment.amount as number
-    }
-
     if (payment.canceled_at) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
@@ -667,7 +657,12 @@ export default class PaymentModuleService
     }
 
     if (payment.captured_at) {
-      return { payment, isFullyCaptured: true }
+      return { isFullyCaptured: true }
+    }
+
+    // If no custom amount is passed, we assume the full amount needs to be captured
+    if (!data.amount) {
+      data.amount = payment.amount as number
     }
 
     const capturedAmount = payment.captures.reduce((captureAmount, next) => {
@@ -700,7 +695,7 @@ export default class PaymentModuleService
       sharedContext
     )
 
-    return { payment, isFullyCaptured, capture }
+    return { isFullyCaptured, capture }
   }
   @InjectManager()
   private async capturePaymentFromProvider_(
@@ -708,15 +703,17 @@ export default class PaymentModuleService
     isFullyCaptured: boolean,
     @MedusaContext() sharedContext: Context = {}
   ) {
-    const paymentData = await this.paymentProviderService_.capturePayment({
-      data: payment.data!,
-      provider_id: payment.provider_id,
-    })
+    const paymentData = await this.paymentProviderService_.capturePayment(
+      payment.provider_id,
+      {
+        data: payment.data!,
+      }
+    )
 
     await this.paymentService_.update(
       {
         id: payment.id,
-        data: paymentData,
+        data: paymentData.data,
         captured_at: isFullyCaptured ? new Date() : undefined,
       },
       sharedContext
@@ -814,15 +811,15 @@ export default class PaymentModuleService
     @MedusaContext() sharedContext: Context = {}
   ) {
     const paymentData = await this.paymentProviderService_.refundPayment(
+      payment.provider_id,
       {
         data: payment.data!,
-        provider_id: payment.provider_id,
-      },
-      refund.raw_amount as BigNumberInput
+        amount: refund.raw_amount as BigNumberInput,
+      }
     )
 
     await this.paymentService_.update(
-      { id: payment.id, data: paymentData },
+      { id: payment.id, data: paymentData.data },
       sharedContext
     )
 
@@ -840,9 +837,8 @@ export default class PaymentModuleService
       sharedContext
     )
 
-    await this.paymentProviderService_.cancelPayment({
+    await this.paymentProviderService_.cancelPayment(payment.provider_id, {
       data: payment.data!,
-      provider_id: payment.provider_id,
     })
 
     await this.paymentService_.update(
@@ -854,15 +850,79 @@ export default class PaymentModuleService
   }
 
   @InjectManager()
-  async getWebhookActionAndData(
-    eventData: ProviderWebhookPayload,
-    @MedusaContext() sharedContext?: Context
-  ): Promise<WebhookActionResult> {
-    const providerId = `pp_${eventData.provider}`
+  private async maybeUpdatePaymentCollection_(
+    paymentCollectionId: string,
+    sharedContext?: Context
+  ) {
+    const paymentCollection = await this.paymentCollectionService_.retrieve(
+      paymentCollectionId,
+      {
+        select: ["amount", "raw_amount", "status"],
+        relations: [
+          "payment_sessions.amount",
+          "payment_sessions.raw_amount",
+          "payments.captures.amount",
+          "payments.captures.raw_amount",
+          "payments.refunds.amount",
+          "payments.refunds.raw_amount",
+        ],
+      },
+      sharedContext
+    )
 
-    return await this.paymentProviderService_.getWebhookActionAndData(
-      providerId,
-      eventData.payload
+    const paymentSessions = paymentCollection.payment_sessions
+    const captures = paymentCollection.payments
+      .map((pay) => [...pay.captures])
+      .flat()
+    const refunds = paymentCollection.payments
+      .map((pay) => [...pay.refunds])
+      .flat()
+
+    let authorizedAmount = MathBN.convert(0)
+    let capturedAmount = MathBN.convert(0)
+    let refundedAmount = MathBN.convert(0)
+    let completedAt: Date | undefined
+
+    for (const ps of paymentSessions) {
+      if (ps.status === PaymentSessionStatus.AUTHORIZED) {
+        authorizedAmount = MathBN.add(authorizedAmount, ps.amount)
+      }
+    }
+
+    for (const capture of captures) {
+      capturedAmount = MathBN.add(capturedAmount, capture.amount)
+    }
+
+    for (const refund of refunds) {
+      refundedAmount = MathBN.add(refundedAmount, refund.amount)
+    }
+
+    let status =
+      paymentSessions.length === 0
+        ? PaymentCollectionStatus.NOT_PAID
+        : PaymentCollectionStatus.AWAITING
+
+    if (MathBN.gt(authorizedAmount, 0)) {
+      status = MathBN.gte(authorizedAmount, paymentCollection.amount)
+        ? PaymentCollectionStatus.AUTHORIZED
+        : PaymentCollectionStatus.PARTIALLY_AUTHORIZED
+    }
+
+    if (MathBN.eq(paymentCollection.amount, capturedAmount)) {
+      status = PaymentCollectionStatus.COMPLETED
+      completedAt = new Date()
+    }
+
+    await this.paymentCollectionService_.update(
+      {
+        id: paymentCollectionId,
+        status,
+        authorized_amount: authorizedAmount,
+        captured_amount: capturedAmount,
+        refunded_amount: refundedAmount,
+        completed_at: completedAt,
+      },
+      sharedContext
     )
   }
 
@@ -907,72 +967,144 @@ export default class PaymentModuleService
   }
 
   @InjectManager()
-  private async maybeUpdatePaymentCollection_(
-    paymentCollectionId: string,
-    sharedContext?: Context
-  ) {
-    const paymentCollection = await this.paymentCollectionService_.retrieve(
-      paymentCollectionId,
-      {
-        select: ["amount", "raw_amount", "status"],
-        relations: [
-          "payment_sessions.amount",
-          "payment_sessions.raw_amount",
-          "payments.captures.amount",
-          "payments.captures.raw_amount",
-          "payments.refunds.amount",
-          "payments.refunds.raw_amount",
-        ],
-      },
+  async createAccountHolder(
+    input: CreateAccountHolderDTO,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<AccountHolderDTO> {
+    if (input.context?.account_holder) {
+      return input.context.account_holder as AccountHolderDTO
+    }
+
+    let accountHolder: InferEntityType<typeof AccountHolder> | undefined
+    let providerAccountHolder: CreateAccountHolderOutput | undefined
+
+    providerAccountHolder =
+      await this.paymentProviderService_.createAccountHolder(
+        input.provider_id,
+        { context: input.context }
+      )
+
+    // This can be empty when either the method is not supported or an account holder wasn't created
+    if (isPresent(providerAccountHolder)) {
+      accountHolder = await this.accountHolderService_.create(
+        {
+          external_id: providerAccountHolder.id,
+          email: input.context.customer?.email,
+          data: providerAccountHolder.data,
+          provider_id: input.provider_id,
+        },
+        sharedContext
+      )
+    }
+
+    return await this.baseRepository_.serialize(accountHolder)
+  }
+
+  @InjectManager()
+  async deleteAccountHolder(
+    id: string,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<void> {
+    const accountHolder = await this.accountHolderService_.retrieve(
+      id,
+      { select: ["id", "provider_id", "external_id", "email", "data"] },
       sharedContext
     )
 
-    const paymentSessions = paymentCollection.payment_sessions
-    const captures = paymentCollection.payments
-      .map((pay) => [...pay.captures])
-      .flat()
-    const refunds = paymentCollection.payments
-      .map((pay) => [...pay.refunds])
-      .flat()
+    await this.accountHolderService_.delete(id, sharedContext)
 
-    let authorizedAmount = MathBN.convert(0)
-    let capturedAmount = MathBN.convert(0)
-    let refundedAmount = MathBN.convert(0)
-
-    for (const ps of paymentSessions) {
-      if (ps.status === PaymentSessionStatus.AUTHORIZED) {
-        authorizedAmount = MathBN.add(authorizedAmount, ps.amount)
-      }
-    }
-
-    for (const capture of captures) {
-      capturedAmount = MathBN.add(capturedAmount, capture.amount)
-    }
-
-    for (const refund of refunds) {
-      refundedAmount = MathBN.add(refundedAmount, refund.amount)
-    }
-
-    let status =
-      paymentSessions.length === 0
-        ? PaymentCollectionStatus.NOT_PAID
-        : PaymentCollectionStatus.AWAITING
-
-    if (MathBN.gt(authorizedAmount, 0)) {
-      status = MathBN.gte(authorizedAmount, paymentCollection.amount)
-        ? PaymentCollectionStatus.AUTHORIZED
-        : PaymentCollectionStatus.PARTIALLY_AUTHORIZED
-    }
-
-    await this.paymentCollectionService_.update(
+    await this.paymentProviderService_.deleteAccountHolder(
+      accountHolder.provider_id,
       {
-        id: paymentCollectionId,
-        status,
-        authorized_amount: authorizedAmount,
-        captured_amount: capturedAmount,
-        refunded_amount: refundedAmount,
-      },
-      sharedContext
+        context: { account_holder: accountHolder },
+      }
+    )
+  }
+
+  @InjectManager()
+  async listPaymentMethods(
+    filters: FilterablePaymentMethodProps,
+    config: FindConfig<PaymentMethodDTO> = {},
+    @MedusaContext() sharedContext?: Context
+  ): Promise<PaymentMethodDTO[]> {
+    const res = await this.paymentProviderService_.listPaymentMethods(
+      filters.provider_id,
+      { context: filters.context }
+    )
+
+    return res.map((item) => ({
+      id: item.id,
+      data: item.data!,
+      provider_id: filters.provider_id,
+    }))
+  }
+
+  @InjectManager()
+  async listAndCountPaymentMethods(
+    filters: FilterablePaymentMethodProps,
+    config: FindConfig<PaymentMethodDTO> = {},
+    @MedusaContext() sharedContext?: Context
+  ): Promise<[PaymentMethodDTO[], number]> {
+    const paymentMethods =
+      await this.paymentProviderService_.listPaymentMethods(
+        filters.provider_id,
+        { context: filters.context }
+      )
+
+    const normalizedResponse = paymentMethods.map((item) => ({
+      id: item.id,
+      data: item.data!,
+      provider_id: filters.provider_id,
+    }))
+
+    return [normalizedResponse, paymentMethods.length]
+  }
+
+  // @ts-ignore
+  createPaymentMethods(
+    data: CreatePaymentMethodDTO,
+    sharedContext?: Context
+  ): Promise<PaymentMethodDTO>
+
+  createPaymentMethods(
+    data: CreatePaymentMethodDTO[],
+    sharedContext?: Context
+  ): Promise<PaymentMethodDTO[]>
+  @InjectManager()
+  async createPaymentMethods(
+    data: CreatePaymentMethodDTO | CreatePaymentMethodDTO[],
+    @MedusaContext() sharedContext?: Context
+  ): Promise<PaymentMethodDTO | PaymentMethodDTO[]> {
+    const input = Array.isArray(data) ? data : [data]
+
+    const result = await promiseAll(
+      input.map((item) =>
+        this.paymentProviderService_.savePaymentMethod(item.provider_id, item)
+      ),
+      { aggregateErrors: true }
+    )
+
+    const normalizedResponse = result.map((item, i) => {
+      return {
+        id: item.id,
+        data: item.data!,
+        provider_id: input[i].provider_id,
+      }
+    })
+
+    return Array.isArray(data) ? normalizedResponse : normalizedResponse[0]
+  }
+
+  @InjectManager()
+  async getWebhookActionAndData(
+    eventData: ProviderWebhookPayload,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<WebhookActionResult> {
+    const providerId = `pp_${eventData.provider}`
+
+    return await this.paymentProviderService_.getWebhookActionAndData(
+      providerId,
+      eventData.payload
     )
   }
 }

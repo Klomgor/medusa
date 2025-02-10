@@ -12,10 +12,10 @@ import { taxRegionLoader } from "../../routes/tax-regions/tax-region-detail/load
 import { RouteExtensions } from "./route-extensions"
 import { SettingsExtensions } from "./settings-extensions"
 
-// TODO: Add translations for all breadcrumbs
 export const RouteMap: RouteObject[] = [
   {
     element: <ProtectedRoute />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         element: <MainLayout />,
@@ -101,6 +101,13 @@ export const RouteMap: RouteObject[] = [
                         path: "organization",
                         lazy: () =>
                           import("../../routes/products/product-organization"),
+                      },
+                      {
+                        path: "shipping-profile",
+                        lazy: () =>
+                          import(
+                            "../../routes/products/product-shipping-profile"
+                          ),
                       },
                       {
                         path: "media",
@@ -348,6 +355,10 @@ export const RouteMap: RouteObject[] = [
                     lazy: () =>
                       import("../../routes/orders/order-edit-billing-address"),
                   },
+                  {
+                    path: "metadata/edit",
+                    lazy: () => import("../../routes/orders/order-metadata"),
+                  },
                 ],
               },
             ],
@@ -508,6 +519,11 @@ export const RouteMap: RouteObject[] = [
                       import(
                         "../../routes/collections/collection-add-products"
                       ),
+                  },
+                  {
+                    path: "metadata/edit",
+                    lazy: () =>
+                      import("../../routes/collections/collection-metadata"),
                   },
                 ],
               },

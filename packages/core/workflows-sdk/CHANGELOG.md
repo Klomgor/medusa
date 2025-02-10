@@ -1,5 +1,39 @@
 # @medusajs/workflows-sdk
 
+## 2.4.0
+
+### Minor Changes
+
+- [#10292](https://github.com/medusajs/medusa/pull/10292) [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: upgrade to mikro-orm 6
+
+### Patch Changes
+
+- Updated dependencies [[`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2), [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547), [`a76208ed0217e5a3993d48e1884e855966691fd8`](https://github.com/medusajs/medusa/commit/a76208ed0217e5a3993d48e1884e855966691fd8), [`ecc8efcb049f5c77cb7e38c2b6a273860590a5f4`](https://github.com/medusajs/medusa/commit/ecc8efcb049f5c77cb7e38c2b6a273860590a5f4), [`da3906efa42ee729c11696e2d3255a60ac3fa958`](https://github.com/medusajs/medusa/commit/da3906efa42ee729c11696e2d3255a60ac3fa958)]:
+  - @medusajs/types@2.4.0
+  - @medusajs/orchestration@2.4.0
+  - @medusajs/modules-sdk@2.4.0
+  - @medusajs/utils@2.4.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/modules-sdk@2.3.1
+  - @medusajs/orchestration@2.3.1
+  - @medusajs/types@2.3.1
+  - @medusajs/utils@2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- Updated dependencies [[`67782350a9da278457c3280c300ebec65bdc6326`](https://github.com/medusajs/medusa/commit/67782350a9da278457c3280c300ebec65bdc6326), [`ff725090bb4ec848cb82c5411bdc25c4b72252ab`](https://github.com/medusajs/medusa/commit/ff725090bb4ec848cb82c5411bdc25c4b72252ab), [`01acf9e7009300c01544f022c2a97d4d3f0fdb65`](https://github.com/medusajs/medusa/commit/01acf9e7009300c01544f022c2a97d4d3f0fdb65), [`5eab9e739919594ae7e7e416942ec93d84b699fd`](https://github.com/medusajs/medusa/commit/5eab9e739919594ae7e7e416942ec93d84b699fd), [`c75678d6d41d3b88d07681ad7e24472d6cbde672`](https://github.com/medusajs/medusa/commit/c75678d6d41d3b88d07681ad7e24472d6cbde672), [`c1930bd6568043d145e34d8360015e7207e18e4a`](https://github.com/medusajs/medusa/commit/c1930bd6568043d145e34d8360015e7207e18e4a), [`28febfc6438351fddb5b214b86f96aff89db688e`](https://github.com/medusajs/medusa/commit/28febfc6438351fddb5b214b86f96aff89db688e), [`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c)]:
+  - @medusajs/utils@2.3.0
+  - @medusajs/types@2.3.0
+  - @medusajs/orchestration@2.3.0
+  - @medusajs/modules-sdk@2.3.0
+
 ## 2.2.0
 
 ### Patch Changes

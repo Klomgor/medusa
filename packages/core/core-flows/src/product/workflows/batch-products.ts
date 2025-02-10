@@ -19,17 +19,17 @@ import { updateProductsWorkflow } from "./update-products"
 /**
  * The products to manage.
  */
-export type BatchProductWorkflowInput = BatchWorkflowInput<
+export interface BatchProductWorkflowInput extends BatchWorkflowInput<
   CreateProductWorkflowInputDTO,
   UpdateProductWorkflowInputDTO
->
+> {}
 
 export const batchProductsWorkflowId = "batch-products"
 /**
  * This workflow creates, updates, or deletes products. It's used by the
  * [Manage Products Admin API Route](https://docs.medusajs.com/api/admin#products_postproductsbatch).
  * 
- * You can use this workflow within your own custom workflows to manage products in bulk. This is
+ * You can use this workflow within your own customizations or custom workflows to manage products in bulk. This is
  * also useful when writing a [seed script](https://docs.medusajs.com/learn/fundamentals/custom-cli-scripts/seed-data) or a custom import script.
  * 
  * @example

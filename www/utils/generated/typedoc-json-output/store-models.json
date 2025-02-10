@@ -1,5 +1,5 @@
 {
-	"id": 15855,
+	"id": 15448,
 	"name": "store-models",
 	"variant": "project",
 	"kind": 1,
@@ -18,13 +18,21 @@
 	},
 	"children": [
 		{
-			"id": 15876,
+			"id": 15469,
 			"name": "StoreCurrency",
 			"variant": "declaration",
 			"kind": 32,
 			"flags": {
 				"isConst": true
 			},
+			"sources": [
+				{
+					"fileName": "currency.ts",
+					"line": 4,
+					"character": 6,
+					"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L4"
+				}
+			],
 			"type": {
 				"type": "reference",
 				"target": {
@@ -42,14 +50,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 15877,
+									"id": 15470,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 15878,
+											"id": 15471,
 											"name": "id",
 											"variant": "declaration",
 											"kind": 1024,
@@ -62,6 +70,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 5,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L5"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -85,7 +101,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15879,
+											"id": 15472,
 											"name": "currency_code",
 											"variant": "declaration",
 											"kind": 1024,
@@ -98,6 +114,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 6,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L6"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -110,7 +134,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15880,
+											"id": 15473,
 											"name": "is_default",
 											"variant": "declaration",
 											"kind": 1024,
@@ -123,6 +147,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 7,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L7"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -135,7 +167,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15881,
+											"id": 15474,
 											"name": "store",
 											"variant": "declaration",
 											"kind": 1024,
@@ -150,6 +182,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 8,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L8"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -159,7 +199,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 15856,
+														"target": 15449,
 														"name": "Store"
 													}
 												],
@@ -173,11 +213,19 @@
 										{
 											"title": "Properties",
 											"children": [
-												15878,
-												15879,
-												15880,
-												15881
+												15471,
+												15472,
+												15473,
+												15474
 											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "currency.ts",
+											"line": 4,
+											"character": 52,
+											"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/currency.ts#L4"
 										}
 									]
 								}
@@ -197,13 +245,21 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 15856,
+			"id": 15449,
 			"name": "Store",
 			"variant": "declaration",
 			"kind": 32,
 			"flags": {
 				"isConst": true
 			},
+			"sources": [
+				{
+					"fileName": "store.ts",
+					"line": 4,
+					"character": 6,
+					"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L4"
+				}
+			],
 			"type": {
 				"type": "reference",
 				"target": {
@@ -221,14 +277,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 15857,
+									"id": 15450,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 15858,
+											"id": 15451,
 											"name": "id",
 											"variant": "declaration",
 											"kind": 1024,
@@ -241,6 +297,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 6,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L6"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -264,7 +328,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15859,
+											"id": 15452,
 											"name": "name",
 											"variant": "declaration",
 											"kind": 1024,
@@ -277,6 +341,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 7,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L7"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -289,7 +361,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15860,
+											"id": 15453,
 											"name": "default_sales_channel_id",
 											"variant": "declaration",
 											"kind": 1024,
@@ -304,6 +376,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 8,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L8"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -316,7 +396,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15861,
+											"id": 15454,
 											"name": "default_region_id",
 											"variant": "declaration",
 											"kind": 1024,
@@ -331,6 +411,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 9,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L9"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -343,7 +431,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15862,
+											"id": 15455,
 											"name": "default_location_id",
 											"variant": "declaration",
 											"kind": 1024,
@@ -358,6 +446,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 10,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L10"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -370,7 +466,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15863,
+											"id": 15456,
 											"name": "metadata",
 											"variant": "declaration",
 											"kind": 1024,
@@ -385,6 +481,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 11,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L11"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -397,7 +501,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 15864,
+											"id": 15457,
 											"name": "supported_currencies",
 											"variant": "declaration",
 											"kind": 1024,
@@ -413,6 +517,14 @@
 													"@expandable"
 												]
 											},
+											"sources": [
+												{
+													"fileName": "store.ts",
+													"line": 12,
+													"character": 4,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L12"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -422,7 +534,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 15876,
+														"target": 15469,
 														"name": "StoreCurrency"
 													}
 												],
@@ -436,14 +548,22 @@
 										{
 											"title": "Properties",
 											"children": [
-												15858,
-												15859,
-												15860,
-												15861,
-												15862,
-												15863,
-												15864
+												15451,
+												15452,
+												15453,
+												15454,
+												15455,
+												15456,
+												15457
 											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "store.ts",
+											"line": 5,
+											"character": 19,
+											"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/store/src/models/store.ts#L5"
 										}
 									]
 								}
@@ -467,214 +587,214 @@
 		{
 			"title": "Variables",
 			"children": [
-				15876,
-				15856
+				15469,
+				15449
 			]
 		}
 	],
 	"packageName": "@medusajs/store",
 	"symbolIdMap": {
-		"15855": {
+		"15448": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/index.ts",
 			"qualifiedName": ""
 		},
-		"15856": {
+		"15449": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "Store"
 		},
-		"15857": {
+		"15450": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object"
 		},
-		"15858": {
+		"15451": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.id"
 		},
-		"15859": {
+		"15452": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.name"
 		},
-		"15860": {
+		"15453": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_sales_channel_id"
 		},
-		"15861": {
+		"15454": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_region_id"
 		},
-		"15862": {
+		"15455": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_location_id"
 		},
-		"15863": {
+		"15456": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.metadata"
 		},
-		"15864": {
+		"15457": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.supported_currencies"
 		},
-		"15865": {
+		"15458": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		},
-		"15866": {
+		"15459": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		},
-		"15867": {
+		"15460": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object"
 		},
-		"15868": {
+		"15461": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.id"
 		},
-		"15869": {
+		"15462": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.currency_code"
 		},
-		"15870": {
+		"15463": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.is_default"
 		},
-		"15871": {
+		"15464": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.store"
 		},
-		"15872": {
+		"15465": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15873": {
+		"15466": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15874": {
+		"15467": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15875": {
+		"15468": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15876": {
+		"15469": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "StoreCurrency"
 		},
-		"15877": {
+		"15470": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object"
 		},
-		"15878": {
+		"15471": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.id"
 		},
-		"15879": {
+		"15472": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.currency_code"
 		},
-		"15880": {
+		"15473": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.is_default"
 		},
-		"15881": {
+		"15474": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__object.store"
 		},
-		"15882": {
+		"15475": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15883": {
+		"15476": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15884": {
+		"15477": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object"
 		},
-		"15885": {
+		"15478": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.id"
 		},
-		"15886": {
+		"15479": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.name"
 		},
-		"15887": {
+		"15480": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_sales_channel_id"
 		},
-		"15888": {
+		"15481": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_region_id"
 		},
-		"15889": {
+		"15482": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_location_id"
 		},
-		"15890": {
+		"15483": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.metadata"
 		},
-		"15891": {
+		"15484": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.supported_currencies"
 		},
-		"15892": {
+		"15485": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		},
-		"15893": {
+		"15486": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		},
-		"15894": {
+		"15487": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15895": {
+		"15488": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
 			"qualifiedName": "__function"
 		},
-		"15896": {
+		"15489": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object"
 		},
-		"15897": {
+		"15490": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.id"
 		},
-		"15898": {
+		"15491": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.name"
 		},
-		"15899": {
+		"15492": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_sales_channel_id"
 		},
-		"15900": {
+		"15493": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_region_id"
 		},
-		"15901": {
+		"15494": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.default_location_id"
 		},
-		"15902": {
+		"15495": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.metadata"
 		},
-		"15903": {
+		"15496": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__object.supported_currencies"
 		},
-		"15904": {
+		"15497": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		},
-		"15905": {
+		"15498": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
 			"qualifiedName": "__function"
 		}
@@ -684,7 +804,7 @@
 			"1": "../../../../packages/modules/store/src/models/index.ts"
 		},
 		"reflections": {
-			"1": 15855
+			"1": 15448
 		}
 	}
 }

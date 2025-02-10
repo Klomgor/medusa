@@ -57,6 +57,14 @@ medusaIntegrationTestRunner({
           )
         ).data.region
 
+        shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "Test", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
+
         salesChannel = (
           await api.post(
             "/admin/sales-channels",
@@ -74,6 +82,7 @@ medusaIntegrationTestRunner({
                 { title: "size", values: ["large", "small"] },
                 { title: "color", values: ["green"] },
               ],
+              shipping_profile_id: shippingProfile.id,
               variants: [
                 {
                   title: "Test variant",
@@ -112,14 +121,6 @@ medusaIntegrationTestRunner({
           { add: [salesChannel.id] },
           adminHeaders
         )
-
-        shippingProfile = (
-          await api.post(
-            `/admin/shipping-profiles`,
-            { name: "Test", type: "default" },
-            adminHeaders
-          )
-        ).data.shipping_profile
 
         const fulfillmentSets = (
           await api.post(
@@ -311,32 +312,6 @@ medusaIntegrationTestRunner({
               price_type: "flat",
             })
           )
-        })
-
-        it("should throw when required fields of a cart are not present", async () => {
-          cart = (
-            await api.post(
-              `/store/carts`,
-              {
-                region_id: region.id,
-                currency_code: "usd",
-                sales_channel_id: null,
-                email: "test@admin.com",
-                items: [],
-              },
-              storeHeaders
-            )
-          ).data.cart
-
-          const { response } = await api
-            .get(`/store/shipping-options?cart_id=${cart.id}`, storeHeaders)
-            .catch((e) => e)
-
-          expect(response.data).toEqual({
-            type: "invalid_data",
-            message:
-              "Field(s) are required to have value to continue - sales_channel_id",
-          })
         })
 
         it("should throw error when cart_id is not passed as a parameter", async () => {

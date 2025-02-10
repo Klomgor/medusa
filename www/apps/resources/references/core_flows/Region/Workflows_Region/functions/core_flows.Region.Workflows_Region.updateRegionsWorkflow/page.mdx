@@ -1,8 +1,12 @@
 ---
 slug: /references/medusa-workflows/updateRegionsWorkflow
 sidebar_label: updateRegionsWorkflow
+sidebar_description: Update regions.
 tags:
   - region
+  - payment
+  - link
+  - remote query
   - event bus
   - workflow
   - pricing
@@ -14,9 +18,13 @@ import { TypeList, WorkflowDiagram } from "docs-ui"
 
 This documentation provides a reference to the `updateRegionsWorkflow`. It belongs to the `@medusajs/medusa/core-flows` package.
 
-This workflow updates regions matching the specified filters.
+This workflow updates regions matching the specified filters. It's used by the
+[Update Region Admin API Route](https://docs.medusajs.com/api/admin#regions\_postregionsid).
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/region/workflows/update-regions.ts#L20" />
+You can use this workflow within your own customizations or custom workflows, allowing you
+to update regions in your custom flows.
+
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/core/core-flows/src/region/workflows/update-regions.ts#L41" />
 
 ## Examples
 
@@ -37,8 +45,12 @@ export async function POST(
   const { result } = await updateRegionsWorkflow(req.scope)
     .run({
       input: {
-        "selector": {},
-        "update": {}
+        selector: {
+          id: "reg_123"
+        },
+        update: {
+          name: "United States"
+        }
       }
     })
 
@@ -63,8 +75,12 @@ export default async function handleOrderPlaced({
   const { result } = await updateRegionsWorkflow(container)
     .run({
       input: {
-        "selector": {},
-        "update": {}
+        selector: {
+          id: "reg_123"
+        },
+        update: {
+          name: "United States"
+        }
       }
     })
 
@@ -89,8 +105,12 @@ export default async function myCustomJob(
   const { result } = await updateRegionsWorkflow(container)
     .run({
       input: {
-        "selector": {},
-        "update": {}
+        selector: {
+          id: "reg_123"
+        },
+        update: {
+          name: "United States"
+        }
       }
     })
 
@@ -116,8 +136,12 @@ const myWorkflow = createWorkflow(
     const result = updateRegionsWorkflow
       .runAsStep({
         input: {
-          "selector": {},
-          "update": {}
+          selector: {
+            id: "reg_123"
+          },
+          update: {
+            name: "United States"
+          }
         }
       })
   }
@@ -129,7 +153,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"updateRegionsWorkflow","steps":[{"type":"step","name":"updateRegionsStep","description":"This step updates regions matching the specified filters.\n\n","link":"../../../Steps_Region/functions/core_flows.Region.Steps_Region.updateRegionsStep/page.mdx","depth":1},{"type":"when","condition":"{\n      return data.normalizedInput.is_tax_inclusive !== undefined\n    }","depth":"2","steps":[{"type":"workflow","name":"updatePricePreferencesWorkflow","description":"This workflow updates one or more price preferences.\n\n","link":"../../../../Pricing/Workflows_Pricing/functions/core_flows.Pricing.Workflows_Pricing.updatePricePreferencesWorkflow/page.mdx","depth":2}]},{"type":"step","name":"emitEventStep","description":"Emit an event.\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":3}]}} />
+<WorkflowDiagram workflow={{"name":"updateRegionsWorkflow","steps":[{"type":"step","name":"updateRegionsStep","description":"This step updates regions matching the specified filters.","link":"../../../Steps_Region/functions/core_flows.Region.Steps_Region.updateRegionsStep/page.mdx","depth":1},{"type":"when","condition":"{\n      return data.normalizedInput.is_tax_inclusive !== undefined\n    }","depth":"2","steps":[{"type":"workflow","name":"updatePricePreferencesWorkflow","description":"Update one or more price preferences.","link":"../../../../Pricing/Workflows_Pricing/functions/core_flows.Pricing.Workflows_Pricing.updatePricePreferencesWorkflow/page.mdx","depth":2}]},{"type":"step","name":"setRegionsPaymentProvidersStep","description":"This step sets the payment providers available in regions.","link":"../../../Steps_Region/functions/core_flows.Region.Steps_Region.setRegionsPaymentProvidersStep/page.mdx","depth":3},{"type":"step","name":"emitEventStep","description":"Emit an event.","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":3}]}} />
 
 ## Input
 

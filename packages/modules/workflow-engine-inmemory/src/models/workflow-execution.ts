@@ -9,6 +9,7 @@ export const WorkflowExecution = model
     execution: model.json().nullable(),
     context: model.json().nullable(),
     state: model.enum(TransactionState),
+    retention_time: model.number().nullable(),
   })
   .indexes([
     {
@@ -21,6 +22,11 @@ export const WorkflowExecution = model
     },
     {
       on: ["transaction_id"],
+      where: "deleted_at IS NULL",
+    },
+    {
+      on: ["workflow_id", "transaction_id"],
+      unique: true,
       where: "deleted_at IS NULL",
     },
     {

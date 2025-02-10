@@ -6,6 +6,7 @@ import { currencySidebar } from "./sidebars/currency.mjs"
 import { customerSidebar } from "./sidebars/customer.mjs"
 import { fulfillmentSidebar } from "./sidebars/fulfillment.mjs"
 import { integrationsSidebar } from "./sidebars/integrations.mjs"
+import { pluginsSidebar } from "./sidebars/plugins.mjs"
 import { inventorySidebar } from "./sidebars/inventory.mjs"
 import { orderSidebar } from "./sidebars/order-module.mjs"
 import { paymentSidebar } from "./sidebars/payment.mjs"
@@ -24,6 +25,7 @@ import { taxSidebar } from "./sidebars/tax.mjs"
 import { troubleshootingSidebar } from "./sidebars/troubleshooting.mjs"
 import { userSidebar } from "./sidebars/user.mjs"
 import { sidebarAttachHrefCommonOptions } from "./utils/sidebar-attach-common-options.mjs"
+import { examplesSidebar } from "./sidebars/examples.mjs"
 
 /** @type {import('types').RawSidebarItem[]} */
 export const sidebar = sidebarAttachHrefCommonOptions([
@@ -32,11 +34,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
     path: "/",
     title: "Overview",
   },
-  {
-    type: "link",
-    path: "/examples",
-    title: "Examples",
-  },
+  ...examplesSidebar,
   {
     type: "link",
     path: "/recipes",
@@ -86,6 +84,13 @@ export const sidebar = sidebarAttachHrefCommonOptions([
     title: "Integrations",
     isChildSidebar: true,
     children: integrationsSidebar,
+  },
+  {
+    type: "ref",
+    path: "/plugins",
+    title: "Plugins",
+    isChildSidebar: true,
+    children: pluginsSidebar,
   },
   {
     type: "link",

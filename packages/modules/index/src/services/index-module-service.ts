@@ -3,27 +3,41 @@ import {
   IEventBusModuleService,
   IndexTypes,
   InternalModuleDeclaration,
+  Logger,
+  ModulesSdkTypes,
   RemoteQueryFunction,
 } from "@medusajs/framework/types"
 import {
-  ContainerRegistrationKeys,
   MikroOrmBaseRepository as BaseRepository,
+  ContainerRegistrationKeys,
   Modules,
+  ModulesSdkUtils,
 } from "@medusajs/framework/utils"
 import { schemaObjectRepresentationPropertiesToOmit } from "@types"
-import { buildSchemaObjectRepresentation } from "../utils/build-config"
-import { defaultSchema } from "../utils/default-schema"
-import { gqlSchemaToTypes } from "../utils/gql-to-types"
+import {
+  buildSchemaObjectRepresentation,
+  Configuration,
+  defaultSchema,
+  gqlSchemaToTypes,
+} from "@utils"
+import { DataSynchronizer } from "./data-synchronizer"
 
 type InjectedDependencies = {
+  logger: Logger
   [Modules.EVENT_BUS]: IEventBusModuleService
   storageProviderCtr: Constructor<IndexTypes.StorageProvider>
   [ContainerRegistrationKeys.QUERY]: RemoteQueryFunction
   storageProviderCtrOptions: unknown
   baseRepository: BaseRepository
+  indexMetadataService: ModulesSdkTypes.IMedusaInternalService<any>
+  indexSyncService: ModulesSdkTypes.IMedusaInternalService<any>
+  dataSynchronizer: DataSynchronizer
 }
 
-export default class IndexModuleService implements IndexTypes.IIndexService {
+export default class IndexModuleService
+  extends ModulesSdkUtils.MedusaService({})
+  implements IndexTypes.IIndexService
+{
   private readonly container_: InjectedDependencies
   private readonly moduleOptions_: IndexTypes.IndexModuleOptions
 
@@ -37,10 +51,32 @@ export default class IndexModuleService implements IndexTypes.IIndexService {
 
   protected storageProvider_: IndexTypes.StorageProvider
 
+  private get indexMetadataService_(): ModulesSdkTypes.IMedusaInternalService<any> {
+    return this.container_.indexMetadataService
+  }
+
+  private get indexSyncService_(): ModulesSdkTypes.IMedusaInternalService<any> {
+    return this.container_.indexSyncService
+  }
+
+  private get dataSynchronizer_(): DataSynchronizer {
+    return this.container_.dataSynchronizer
+  }
+
+  private get logger_(): Logger {
+    try {
+      return this.container_.logger
+    } catch (e) {
+      return console as unknown as Logger
+    }
+  }
+
   constructor(
     container: InjectedDependencies,
     protected readonly moduleDeclaration: InternalModuleDeclaration
   ) {
+    super(...arguments)
+
     this.container_ = container
     this.moduleOptions_ = (moduleDeclaration.options ??
       moduleDeclaration) as unknown as IndexTypes.IndexModuleOptions
@@ -54,7 +90,6 @@ export default class IndexModuleService implements IndexTypes.IIndexService {
     this.eventBusModuleService_ = eventBusModuleService
     this.storageProviderCtr_ = storageProviderCtr
     this.storageProviderCtrOptions_ = storageProviderCtrOptions
-
     if (!this.eventBusModuleService_) {
       throw new Error(
         "EventBusModuleService is required for the IndexModule to work"
@@ -88,8 +123,25 @@ export default class IndexModuleService implements IndexTypes.IIndexService {
       }
 
       await gqlSchemaToTypes(this.moduleOptions_.schema ?? defaultSchema)
+
+      this.dataSynchronizer_.onApplicationStart({
+        schemaObjectRepresentation: this.schemaObjectRepresentation_,
+        storageProvider: this.storageProvider_,
+      })
+
+      const configurationChecker = new Configuration({
+        schemaObjectRepresentation: this.schemaObjectRepresentation_,
+        indexMetadataService: this.indexMetadataService_,
+        indexSyncService: this.indexSyncService_,
+        dataSynchronizer: this.dataSynchronizer_,
+      })
+      const entitiesMetadataChanged = await configurationChecker.checkChanges()
+
+      if (entitiesMetadataChanged.length) {
+        await this.dataSynchronizer_.syncEntities(entitiesMetadataChanged)
+      }
     } catch (e) {
-      console.log(e)
+      this.logger_.error(e)
     }
   }
 

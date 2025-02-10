@@ -6,6 +6,7 @@ const DEFAULT_PROPERTIES = [
   "email",
   "display_id",
   "currency_code",
+  "metadata",
   // --- TOTALS ---
   "total",
   "item_total",

@@ -19,6 +19,7 @@ import {
   MedusaError,
   Modules,
   ProductStatus,
+  PromotionStatus,
   PromotionType,
 } from "@medusajs/utils"
 import {
@@ -657,6 +658,7 @@ medusaIntegrationTestRunner({
 
       describe("POST /store/carts/:id/line-items", () => {
         let region
+
         const productData = {
           title: "Medusa T-Shirt",
           handle: "t-shirt",
@@ -715,8 +717,21 @@ medusaIntegrationTestRunner({
         })
 
         it("adding an existing variant should update or create line item depending on metadata", async () => {
+          const shippingProfile =
+            await fulfillmentModule.createShippingProfiles({
+              name: "Test",
+              type: "default",
+            })
+
           const product = (
-            await api.post(`/admin/products`, productData, adminHeaders)
+            await api.post(
+              `/admin/products`,
+              {
+                ...productData,
+                shipping_profile_id: shippingProfile.id,
+              },
+              adminHeaders
+            )
           ).data.product
 
           const cart = (
@@ -1146,6 +1161,7 @@ medusaIntegrationTestRunner({
               `/admin/inventory-items`,
               {
                 sku: "12345",
+                requires_shipping: false,
               },
               adminHeaders
             )
@@ -1202,6 +1218,7 @@ medusaIntegrationTestRunner({
               "/admin/products",
               {
                 title: "Test fixture",
+                shipping_profile_id: shippingProfile.id,
                 options: [
                   { title: "size", values: ["large", "small"] },
                   { title: "color", values: ["green"] },
@@ -1266,6 +1283,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 campaign: {
                   campaign_identifier: "test",
@@ -1328,7 +1346,6 @@ medusaIntegrationTestRunner({
           ).data.shipping_option
 
           paymentCollection = await paymentService.createPaymentCollections({
-            region_id: region.id,
             amount: 1000,
             currency_code: "usd",
           })

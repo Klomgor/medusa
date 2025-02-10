@@ -1,11 +1,11 @@
 "use client"
 
-import * as Popover from "@radix-ui/react-popover"
-import * as Portal from "@radix-ui/react-portal"
+import { Popover, Portal } from "radix-ui"
 import * as React from "react"
 
 import { Kbd } from "@/components/kbd"
 import { clx } from "@/utils/clx"
+import { isInputElement } from "@/utils/is-input-element"
 
 interface CommandBarProps extends React.PropsWithChildren {
   open?: boolean
@@ -167,7 +167,11 @@ const Command = React.forwardRef<HTMLButtonElement, CommandProps>(
   ) => {
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === shortcut) {
+        if (isInputElement(document.activeElement)) {
+          return
+        }
+
+        if (event.key.toLowerCase() === shortcut.toLowerCase()) {
           event.preventDefault()
           event.stopPropagation()
           action()
