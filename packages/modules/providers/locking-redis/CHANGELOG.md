@@ -1,5 +1,7 @@
 # @medusajs/locking-redis
 
+## 2.5.2
+
 ## 2.5.1
 
 ## 2.5.0

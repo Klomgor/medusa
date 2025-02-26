@@ -1,5 +1,11 @@
 # @medusajs/link-modules
 
+## 2.5.2
+
+### Patch Changes
+
+- [#11601](https://github.com/medusajs/medusa/pull/11601) [`b42f151be31161a5d7a73132ee6794b990403d76`](https://github.com/medusajs/medusa/commit/b42f151be31161a5d7a73132ee6794b990403d76) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(): Improve internal repository delete algo
+
 ## 2.5.1
 
 ## 2.5.0
