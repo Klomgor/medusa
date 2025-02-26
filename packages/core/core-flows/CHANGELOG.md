@@ -1,5 +1,13 @@
 # @medusajs/core-flows
 
+## 2.5.2
+
+### Patch Changes
+
+- [#11538](https://github.com/medusajs/medusa/pull/11538) [`03731c7660fe5dca3c6d3c38a2a71eb2ea89e192`](https://github.com/medusajs/medusa/commit/03731c7660fe5dca3c6d3c38a2a71eb2ea89e192) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(core-flows): reserve inventory from locations with availability
+
+- [#11602](https://github.com/medusajs/medusa/pull/11602) [`fa1793e8e92164251c776859dea7a5e312ef9432`](https://github.com/medusajs/medusa/commit/fa1793e8e92164251c776859dea7a5e312ef9432) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(core-flows): avoid overfetching to refresh cart
+
 ## 2.5.1
 
 ### Patch Changes

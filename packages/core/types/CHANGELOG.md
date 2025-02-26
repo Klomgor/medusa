@@ -1,5 +1,17 @@
 # @medusajs/types
 
+## 2.5.2
+
+### Patch Changes
+
+- [#11604](https://github.com/medusajs/medusa/pull/11604) [`8bb0a25f573c62ca1d1bcd7af184b0d0cf98e125`](https://github.com/medusajs/medusa/commit/8bb0a25f573c62ca1d1bcd7af184b0d0cf98e125) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(types, medusa): remove fulfillment and payment status filters from validator + http types
+
+- [#11597](https://github.com/medusajs/medusa/pull/11597) [`698a520729a3045cd13eed5ee0e5120a563e9261`](https://github.com/medusajs/medusa/commit/698a520729a3045cd13eed5ee0e5120a563e9261) Thanks [@shahednasser](https://github.com/shahednasser)! - chore(types): change payment provider types to interfaces
+
+- [#11581](https://github.com/medusajs/medusa/pull/11581) [`d814d9540e76256be23d733b73cf5a63aa380c8b`](https://github.com/medusajs/medusa/commit/d814d9540e76256be23d733b73cf5a63aa380c8b) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(types): Allow providing either vite@5 or vite@6 for the peer dependency
+
+- [#11601](https://github.com/medusajs/medusa/pull/11601) [`b42f151be31161a5d7a73132ee6794b990403d76`](https://github.com/medusajs/medusa/commit/b42f151be31161a5d7a73132ee6794b990403d76) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(): Improve internal repository delete algo
+
 ## 2.5.1
 
 ### Patch Changes
