@@ -137,6 +137,37 @@ export function MedusaService<
     ? ModelConfigurationsToConfigTemplate<TModels>
     : ModelsConfig
 > {
+  function emitSoftDeleteRestoreEvents(
+    this: AbstractModuleService_,
+    klassPrototype: any,
+    cascadedModelsMap: Record<string, string[]>,
+    action: string,
+    sharedContext: Context
+  ) {
+    const joinerConfig = (
+      typeof this.__joinerConfig === "function"
+        ? this.__joinerConfig()
+        : this.__joinerConfig
+    ) as ModuleJoinerConfig
+
+    const emittedEntities = new Set<string>()
+
+    Object.entries(cascadedModelsMap).forEach(([linkableKey, ids]) => {
+      const entity = joinerConfig.linkableKeys?.[linkableKey]!
+      if (entity && !emittedEntities.has(entity)) {
+        emittedEntities.add(entity)
+        const linkableKeyEntity = camelToSnakeCase(entity).toLowerCase()
+
+        klassPrototype.aggregatedEvents.bind(this)({
+          action: action,
+          object: linkableKeyEntity,
+          data: { id: ids },
+          context: sharedContext,
+        })
+      }
+    })
+  }
+
   const buildAndAssignMethodImpl = function (
     klassPrototype: any,
     method: string,
@@ -321,27 +352,11 @@ export function MedusaService<
           )
 
           if (mappedCascadedModelsMap) {
-            const joinerConfig = (
-              typeof this.__joinerConfig === "function"
-                ? this.__joinerConfig()
-                : this.__joinerConfig
-            ) as ModuleJoinerConfig
-
-            Object.entries(mappedCascadedModelsMap).forEach(
-              ([linkableKey, ids]) => {
-                const entity = joinerConfig.linkableKeys?.[linkableKey]!
-                if (entity) {
-                  const linkableKeyEntity =
-                    camelToSnakeCase(entity).toLowerCase()
-
-                  klassPrototype.aggregatedEvents.bind(this)({
-                    action: CommonEvents.DELETED,
-                    object: linkableKeyEntity,
-                    data: { id: ids },
-                    context: sharedContext,
-                  })
-                }
-              }
+            emitSoftDeleteRestoreEvents.bind(this)(
+              klassPrototype,
+              mappedCascadedModelsMap,
+              CommonEvents.DELETED,
+              sharedContext
             )
           }
 
@@ -378,26 +393,11 @@ export function MedusaService<
           )
 
           if (mappedCascadedModelsMap) {
-            const joinerConfig = (
-              typeof this.__joinerConfig === "function"
-                ? this.__joinerConfig()
-                : this.__joinerConfig
-            ) as ModuleJoinerConfig
-
-            Object.entries(mappedCascadedModelsMap).forEach(
-              ([linkableKey, ids]) => {
-                const entity = joinerConfig.linkableKeys?.[linkableKey]!
-                if (entity) {
-                  const linkableKeyEntity =
-                    camelToSnakeCase(entity).toLowerCase()
-                  klassPrototype.aggregatedEvents.bind(this)({
-                    action: CommonEvents.CREATED,
-                    object: linkableKeyEntity,
-                    data: { id: ids },
-                    context: sharedContext,
-                  })
-                }
-              }
+            emitSoftDeleteRestoreEvents.bind(this)(
+              klassPrototype,
+              mappedCascadedModelsMap,
+              CommonEvents.CREATED,
+              sharedContext
             )
           }
 

@@ -259,7 +259,7 @@ export function MedusaInternalService<
       const primaryKeys = AbstractService_.retrievePrimaryKeys(model)
       const inputArray = Array.isArray(input) ? input : [input]
 
-      const toUpdateData: { entity; update }[] = []
+      const toUpdateData: { entity: TEntity; update: Partial<TEntity> }[] = []
 
       // Only used when we receive data and no selector
       const keySelectorForDataOnly: any = {
@@ -353,10 +353,17 @@ export function MedusaInternalService<
 
       // Manage metadata if needed
       toUpdateData.forEach(({ entity, update }) => {
-        if (isPresent(update.metadata)) {
-          entity.metadata = update.metadata = mergeMetadata(
-            entity.metadata ?? {},
-            update.metadata
+        const update_ = update as (typeof toUpdateData)[number]["update"] & {
+          metadata: Record<string, unknown>
+        }
+        const entity_ = entity as InferEntityType<TEntity> & {
+          metadata?: Record<string, unknown>
+        }
+
+        if (isPresent(update_.metadata)) {
+          entity_.metadata = update_.metadata = mergeMetadata(
+            entity_.metadata ?? {},
+            update_.metadata
           )
         }
       })

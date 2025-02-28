@@ -52,7 +52,7 @@ export const buildProductAndRelationsData = ({
   options,
   variants,
   collection_id,
-}: Partial<ProductTypes.CreateProductDTO>) => {
+}: Partial<ProductTypes.CreateProductDTO> & { tags?: { value: string }[] }) => {
   const defaultOptionTitle = "test-option"
   const defaultOptionValue = "test-value"
 
