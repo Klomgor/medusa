@@ -756,6 +756,16 @@ medusaIntegrationTestRunner({
                   },
                   quantity: 1,
                 },
+                {
+                  title: "zero price item",
+                  subtitle: "zero price item",
+                  thumbnail: "some-url",
+                  requires_shipping: false,
+                  is_discountable: false,
+                  is_tax_inclusive: false,
+                  unit_price: 0,
+                  quantity: 1,
+                },
               ],
               cart_id: cart.id,
             },
@@ -841,6 +851,12 @@ medusaIntegrationTestRunner({
                   variant_sku: null,
                   variant_title: null,
                 },
+                expect.objectContaining({
+                  title: "zero price item",
+                  subtitle: "zero price item",
+                  is_custom_price: true,
+                  unit_price: 0,
+                }),
               ],
             })
           )

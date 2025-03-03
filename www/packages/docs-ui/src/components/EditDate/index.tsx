@@ -2,11 +2,11 @@ import React from "react"
 
 const DATE_REGEX = /^[a-zA-Z]+ (?<month>[a-zA-Z]+)/
 
-type MainNavEditDateProps = {
+type EditDateProps = {
   date: string
 }
 
-export const MainNavEditDate = ({ date }: MainNavEditDateProps) => {
+export const EditDate = ({ date }: EditDateProps) => {
   const today = new Date(date)
   const dateObj = new Date(date)
   const formattedDate = dateObj.toString()

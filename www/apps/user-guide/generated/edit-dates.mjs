@@ -4,7 +4,7 @@ export const generatedEditDates = {
   "app/tips/lists/page.mdx": "2025-02-14T14:16:04.867Z",
   "app/settings/sales-channels/page.mdx": "2025-02-19T17:33:55.584Z",
   "app/settings/users/page.mdx": "2025-02-19T11:34:00.736Z",
-  "app/page.mdx": "2025-02-14T11:18:46.636Z",
+  "app/page.mdx": "2025-02-26T14:18:27.755Z",
   "app/settings/page.mdx": "2025-02-19T15:46:09.018Z",
   "app/products/export/page.mdx": "2025-02-18T12:16:52.639Z",
   "app/settings/return-reasons/page.mdx": "2025-02-19T17:34:01.942Z",
@@ -13,7 +13,7 @@ export const generatedEditDates = {
   "app/settings/users/invites/page.mdx": "2025-02-19T11:38:54.009Z",
   "app/settings/developer/page.mdx": "2025-02-25T15:11:55.392Z",
   "app/settings/profile/page.mdx": "2025-02-25T16:24:21.165Z",
-  "app/settings/store/page.mdx": "2025-02-19T11:19:01.136Z",
+  "app/settings/store/page.mdx": "2025-02-26T10:33:07.346Z",
   "app/products/import/page.mdx": "2025-02-18T12:15:03.830Z",
   "app/products/categories/page.mdx": "2025-02-19T10:21:42.058Z",
   "app/inventory/reservations/page.mdx": "2025-02-18T13:56:28.134Z",
@@ -54,5 +54,6 @@ export const generatedEditDates = {
   "app/settings/product-types/page.mdx": "2025-02-19T17:36:16.496Z",
   "app/settings/developer/publishable-api-keys/page.mdx": "2025-02-25T16:15:29.847Z",
   "app/settings/developer/secret-api-keys/page.mdx": "2025-02-25T16:17:40.621Z",
-  "app/settings/developer/workflows/page.mdx": "2025-02-25T15:52:48.349Z"
+  "app/settings/developer/workflows/page.mdx": "2025-02-25T15:52:48.349Z",
+  "app/reset-password/page.mdx": "2025-02-26T11:13:45.457Z"
 }

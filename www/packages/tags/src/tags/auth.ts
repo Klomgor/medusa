@@ -1,5 +1,9 @@
 export const auth = [
   {
+    "title": "Reset Password",
+    "path": "https://docs.medusajs.com/user-guide/reset-password"
+  },
+  {
     "title": "Log-out Customer in Storefront",
     "path": "https://docs.medusajs.com/resources/storefront-development/customers/log-out"
   },

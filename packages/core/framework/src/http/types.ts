@@ -111,6 +111,18 @@ export type FileSystemRouteDescriptor = ScannedRouteDescriptor & {
   relativePath: string
 }
 
+export type ScannedMiddlewareDescriptor = {
+  matcher: string
+  method?: MiddlewareVerb | MiddlewareVerb[]
+  handler: MiddlewareFunction
+}
+
+export type BodyParserConfigRoute = {
+  matcher: string
+  method?: MiddlewareVerb | MiddlewareVerb[]
+  config?: ParserConfig
+}
+
 export type GlobalMiddlewareDescriptor = {
   config?: MiddlewaresConfig
 }

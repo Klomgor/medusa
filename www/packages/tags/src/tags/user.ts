@@ -1,5 +1,9 @@
 export const user = [
   {
+    "title": "Reset Password",
+    "path": "https://docs.medusajs.com/user-guide/reset-password"
+  },
+  {
     "title": "Manage Profile",
     "path": "https://docs.medusajs.com/user-guide/settings/profile"
   },

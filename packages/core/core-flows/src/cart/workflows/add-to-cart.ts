@@ -1,4 +1,7 @@
-import { AddToCartWorkflowInputDTO } from "@medusajs/framework/types"
+import {
+  AddToCartWorkflowInputDTO,
+  ConfirmVariantInventoryWorkflowInputDTO,
+} from "@medusajs/framework/types"
 import { CartWorkflowEvents, isDefined } from "@medusajs/framework/utils"
 import {
   createHook,
@@ -124,7 +127,7 @@ export const addToCartWorkflow = createWorkflow(
           isCustomPrice: isDefined(item?.unit_price),
         }
 
-        if (variant && !input.unitPrice) {
+        if (variant && !isDefined(input.unitPrice)) {
           input.unitPrice = variant.calculated_price?.calculated_amount
         }
 
@@ -141,12 +144,32 @@ export const addToCartWorkflow = createWorkflow(
       items: lineItems,
     })
 
+    const itemsToConfirmInventory = transform(
+      { itemsToUpdate, itemsToCreate },
+      (data) => {
+        return (data.itemsToUpdate as [])
+          .concat(data.itemsToCreate as [])
+          .filter(
+            (
+              item:
+                | {
+                    data: { variant_id: string }
+                  }
+                | { variant_id?: string }
+            ) =>
+              isDefined(
+                "data" in item ? item.data?.variant_id : item.variant_id
+              )
+          ) as unknown as ConfirmVariantInventoryWorkflowInputDTO["itemsToUpdate"]
+      }
+    )
+
     confirmVariantInventoryWorkflow.runAsStep({
       input: {
         sales_channel_id: cart.sales_channel_id,
         variants,
         items: input.items,
-        itemsToUpdate,
+        itemsToUpdate: itemsToConfirmInventory,
       },
     })
 

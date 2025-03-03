@@ -49,7 +49,7 @@ export const recipesSidebar = [
       {
         type: "link",
         path: "/recipes/erp/odoo",
-        title: "Odoo Integration",
+        title: "Example: Odoo Integration",
       },
     ],
   },

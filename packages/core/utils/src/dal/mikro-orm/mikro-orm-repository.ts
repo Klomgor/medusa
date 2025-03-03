@@ -31,10 +31,7 @@ import {
 } from "../../common"
 import { toMikroORMEntity } from "../../dml"
 import { buildQuery } from "../../modules-sdk/build-query"
-import {
-  getSoftDeletedCascadedEntitiesIdsMappedBy,
-  transactionWrapper,
-} from "../utils"
+import { transactionWrapper } from "../utils"
 import { dbErrorMapper } from "./db-error-mapper"
 import { mikroOrmSerializer } from "./mikro-orm-serializer"
 import { mikroOrmUpdateDeletedAtRecursively } from "./utils"
@@ -215,17 +212,13 @@ export class MikroOrmBaseRepository<const T extends object = object>
     const date = new Date()
 
     const manager = this.getActiveManager<SqlEntityManager>(sharedContext)
-    await mikroOrmUpdateDeletedAtRecursively<T>(
+    const softDeletedEntitiesMap = await mikroOrmUpdateDeletedAtRecursively<T>(
       manager,
       entities as any[],
       date
     )
 
-    const softDeletedEntitiesMap = getSoftDeletedCascadedEntitiesIdsMappedBy({
-      entities,
-    })
-
-    return [entities, softDeletedEntitiesMap]
+    return [entities, Object.fromEntries(softDeletedEntitiesMap)]
   }
 
   async restore(
@@ -239,14 +232,13 @@ export class MikroOrmBaseRepository<const T extends object = object>
     const entities = await this.find(query, sharedContext)
 
     const manager = this.getActiveManager<SqlEntityManager>(sharedContext)
-    await mikroOrmUpdateDeletedAtRecursively(manager, entities as any[], null)
+    const softDeletedEntitiesMap = await mikroOrmUpdateDeletedAtRecursively(
+      manager,
+      entities as any[],
+      null
+    )
 
-    const softDeletedEntitiesMap = getSoftDeletedCascadedEntitiesIdsMappedBy({
-      entities,
-      restored: true,
-    })
-
-    return [entities, softDeletedEntitiesMap]
+    return [entities, Object.fromEntries(softDeletedEntitiesMap)]
   }
 }
 
@@ -398,38 +390,41 @@ export function mikroOrmBaseRepositoryFactory<const T extends object>(
         descriptor,
       ] of collectionsToRemoveAllFrom) {
         await promiseAll(
-          data.map(async ({ entity }) => {
+          data.flatMap(async ({ entity }) => {
             if (!descriptor.mappedBy) {
               return await entity[collectionToRemoveAllFrom].init()
             }
 
+            const promises: Promise<any>[] = []
             await entity[collectionToRemoveAllFrom].init()
             const items = entity[collectionToRemoveAllFrom]
 
             for (const item of items) {
-              await item[descriptor.mappedBy!].init()
+              promises.push(item[descriptor.mappedBy!].init())
             }
+
+            return promises
           })
         )
       }
     }
 
     async update(
-      data: { entity; update }[],
+      data: { entity: any; update: any }[],
       context?: Context
     ): Promise<InferRepositoryReturnType<T>[]> {
       const manager = this.getActiveManager<EntityManager>(context)
 
       await this.initManyToManyToDetachAllItemsIfNeeded(data, context)
 
-      data.map((_, index) => {
-        manager.assign(data[index].entity, data[index].update, {
+      data.forEach(({ entity, update }) => {
+        manager.assign(entity, update, {
           mergeObjectProperties: true,
         })
-        manager.persist(data[index].entity)
+        manager.persist(entity)
       })
 
-      return data.map((d) => d.entity)
+      return data.map((d) => d.entity) as InferRepositoryReturnType<T>[]
     }
 
     async delete(

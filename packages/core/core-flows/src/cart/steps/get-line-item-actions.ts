@@ -2,6 +2,7 @@ import {
   CartLineItemDTO,
   CreateLineItemForCartDTO,
   ICartModuleService,
+  UpdateLineItemWithoutSelectorDTO,
   UpdateLineItemWithSelectorDTO,
 } from "@medusajs/framework/types"
 import {
@@ -34,14 +35,16 @@ export interface GetLineItemActionsStepOutput {
   /**
    * The line items to update.
    */
-  itemsToUpdate: UpdateLineItemWithSelectorDTO[]
+  itemsToUpdate:
+    | UpdateLineItemWithSelectorDTO[]
+    | UpdateLineItemWithoutSelectorDTO[]
 }
 
 export const getLineItemActionsStepId = "get-line-item-actions-step"
 /**
  * This step returns lists of cart line items to create or update based on the
  * provided input.
- * 
+ *
  * @example
  * const data = getLineItemActionsStep({
  *   "id": "cart_123",
@@ -56,19 +59,36 @@ export const getLineItemActionsStepId = "get-line-item-actions-step"
 export const getLineItemActionsStep = createStep(
   getLineItemActionsStepId,
   async (data: GetLineItemActionsStepInput, { container }) => {
+    if (!data.items.length) {
+      return new StepResponse({ itemsToCreate: [], itemsToUpdate: [] }, null)
+    }
+
     const cartModule = container.resolve<ICartModuleService>(Modules.CART)
 
-    const existingVariantItems = await cartModule.listLineItems({
-      cart_id: data.id,
-      variant_id: data.items.map((d) => d.variant_id!),
-    })
+    const variantIds = data.items.map((d) => d.variant_id!)
+    const existingVariantItems = await cartModule.listLineItems(
+      {
+        cart_id: data.id,
+        variant_id: variantIds,
+      },
+      {
+        select: [
+          "id",
+          "metadata",
+          "variant_id",
+          "quantity",
+          "unit_price",
+          "compare_at_unit_price",
+        ],
+      }
+    )
 
     const variantItemMap = new Map<string, CartLineItemDTO>(
       existingVariantItems.map((item) => [item.variant_id!, item])
     )
 
     const itemsToCreate: CreateLineItemForCartDTO[] = []
-    const itemsToUpdate: UpdateLineItemWithSelectorDTO[] = []
+    const itemsToUpdate: UpdateLineItemWithSelectorDTO["data"][] = []
 
     for (const item of data.items) {
       const existingItem = variantItemMap.get(item.variant_id!)
@@ -83,15 +103,12 @@ export const getLineItemActionsStep = createStep(
         )
 
         itemsToUpdate.push({
-          selector: { id: existingItem.id },
-          data: {
-            id: existingItem.id,
-            quantity: quantity,
-            variant_id: item.variant_id!,
-            unit_price: item.unit_price ?? existingItem.unit_price,
-            compare_at_unit_price:
-              item.compare_at_unit_price ?? existingItem.compare_at_unit_price,
-          },
+          id: existingItem.id,
+          quantity: quantity,
+          variant_id: item.variant_id!,
+          unit_price: item.unit_price ?? existingItem.unit_price,
+          compare_at_unit_price:
+            item.compare_at_unit_price ?? existingItem.compare_at_unit_price,
         })
       } else {
         itemsToCreate.push(item)
@@ -99,7 +116,8 @@ export const getLineItemActionsStep = createStep(
     }
 
     return new StepResponse(
-      { itemsToCreate, itemsToUpdate } as GetLineItemActionsStepOutput
-    , null)
+      { itemsToCreate, itemsToUpdate } as GetLineItemActionsStepOutput,
+      null
+    )
   }
 )
