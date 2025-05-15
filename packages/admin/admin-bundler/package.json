@@ -21,8 +21,8 @@
     "@medusajs/types": "^2.5.1",
     "@types/compression": "^1.7.5",
     "copyfiles": "^2.4.1",
-    "express": "^4.21.0",
-    "tsup": "^8.0.1",
+    "express": "^4.20.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
@@ -33,12 +33,12 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
     "compression": "^1.7.4",
-    "express": "^4.21.0",
+    "express": "^4.20.0",
     "get-port": "^5.1.1",
     "glob": "^10.3.10",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.4.14"
+    "vite": "^5.4.19"
   },
   "peerDependencies": {
     "react-dom": "^18.0.0"
