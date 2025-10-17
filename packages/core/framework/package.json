@@ -78,7 +78,7 @@
     "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
     "typescript": "^5.6.2",
-    "vite": "^5.4.14"
+    "vite": "^5.4.20"
   },
   "dependencies": {
     "@jercle/yargonaut": "^1.1.5",
@@ -112,7 +112,7 @@
     "@medusajs/cli": "2.10.3",
     "connect-dynamodb": "^3.0.5",
     "ioredis": "^5.4.1",
-    "vite": "^5.4.14"
+    "vite": "^5.4.20"
   },
   "peerDependenciesMeta": {
     "@aws-sdk/client-dynamodb": {
