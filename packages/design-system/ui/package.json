@@ -76,7 +76,7 @@
     "tailwindcss": "^3.4.3",
     "tsc-alias": "^1.8.7",
     "typescript": "^5.6.2",
-    "vite": "^5.4.14",
+    "vite": "^5.4.21",
     "vite-plugin-turbosnap": "^1.0.2",
     "vitest": "^3.0.5"
   },
