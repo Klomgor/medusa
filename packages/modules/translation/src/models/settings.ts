@@ -1,5 +1,8 @@
 import { model } from "@medusajs/framework/utils"
 
+/**
+ * @since 2.12.4
+ */
 const Settings = model
   .define("translation_settings", {
     id: model.id({ prefix: "trset" }).primaryKey(),

@@ -2458,7 +2458,7 @@
   "translations": {
     "domain": "Traducciones",
     "list": {
-      "metrics": "{{translated}} de {{total}} textos traducidos"
+      "metrics": "{{translated}} de {{total}} traducciones"
     },
     "actions": {
       "manage": "Gestionar traducciones",
@@ -2480,7 +2480,8 @@
     "activeLocales": {
       "heading": "Idiomas",
       "subtitle": "Traducciones activas",
-      "noLocalesTip": "Configura al menos un idioma para empezar a traducir tu información"
+      "noLocalesTip": "Configura al menos un lenguaje para empezar a traducir tu información",
+      "noLocalesTipConfigureAction": "Configurar"
     },
     "completion": {
       "heading": "Textos traducidos",

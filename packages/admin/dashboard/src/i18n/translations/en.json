@@ -2524,7 +2524,7 @@
     },
     "subtitle": "Manage translations of your data in Medusa",
     "list": {
-      "metrics": "{{translated}} of {{total}} fields translated"
+      "metrics": "{{translated}} of {{total}} translations"
     },
     "edit": {
       "successToast": "Translations updated successfully",
@@ -2540,7 +2540,8 @@
     "activeLocales": {
       "heading": "Languages",
       "subtitle": "Activated translations",
-      "noLocalesTip": "Configure at least one locale to start translating your data"
+      "noLocalesTip": "Configure at least one language to start translating your data",
+      "noLocalesTipConfigureAction": "Configure"
     },
     "completion": {
       "heading": "Translated fields",

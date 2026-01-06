@@ -1377,7 +1377,7 @@ class OasKindGenerator extends FunctionKindGenerator {
       }),
       this.getParameterObject({
         type: "header",
-        name: "Content-Language",
+        name: "x-medusa-locale",
         description:
           "The locale in BCP 47 format to retrieve localized content.",
         required: false,

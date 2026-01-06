@@ -664,6 +664,10 @@ export const filesMap = [
     "pathname": "/commerce-modules/translation/concepts"
   },
   {
+    "filePath": "/www/apps/resources/app/commerce-modules/translation/custom-data-models/page.mdx",
+    "pathname": "/commerce-modules/translation/custom-data-models"
+  },
+  {
     "filePath": "/www/apps/resources/app/commerce-modules/translation/js-sdk/page.mdx",
     "pathname": "/commerce-modules/translation/js-sdk"
   },

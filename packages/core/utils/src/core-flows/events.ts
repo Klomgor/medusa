@@ -870,6 +870,8 @@ export const ShippingOptionWorkflowEvents = {
   /**
    * Emitted when shipping options are created.
    *
+   * @since 2.12.4
+   *
    * @eventPayload
    * ```ts
    * {
@@ -881,6 +883,8 @@ export const ShippingOptionWorkflowEvents = {
   /**
    * Emitted when shipping options are updated.
    *
+   * @since 2.12.4
+   *
    * @eventPayload
    * ```ts
    * {
@@ -891,6 +895,8 @@ export const ShippingOptionWorkflowEvents = {
   UPDATED: "shipping-option.updated",
   /**
    * Emitted when shipping options are deleted.
+   *
+   * @since 2.12.4
    *
    * @eventPayload
    * ```ts

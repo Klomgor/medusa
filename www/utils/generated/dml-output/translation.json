@@ -23,5 +23,17 @@
 		"deprecated": {
 			"is_deprecated": false
 		}
+	},
+	"TranslationSettings": {
+		"filePath": "packages/modules/translation/src/models/settings.ts",
+		"properties": {
+			"id": "The ID of the translation settings.",
+			"entity_type": "The entity type of the translation settings",
+			"fields": "The fields of the translation settings\n\n@example [\"title\", \"description\", \"material\"]"
+		},
+		"since": "2.12.4",
+		"deprecated": {
+			"is_deprecated": false
+		}
 	}
 }

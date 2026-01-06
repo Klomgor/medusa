@@ -165,7 +165,9 @@ export class Translation {
    * This method retrieves a paginated list of entities for a given entity type with only their
    * translatable fields.
    * It sends a request to the
-   * Get Translation Entities API route.
+   * [Get Translation Entities](https://docs.medusajs.com/api/admin#translations_gettranslationentities) API route.
+   *
+   * @since 2.12.4
    *
    * @param query - The query parameters including the entity type and pagination configurations.
    * @param headers - Headers to pass in the request.

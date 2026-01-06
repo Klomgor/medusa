@@ -1,5 +1,4 @@
 import {
-  applyTranslations,
   ContainerRegistrationKeys,
   FeatureFlag,
   Modules,
@@ -15,6 +14,26 @@ export interface UpdateOrderShippingMethodsTranslationsStepInput {
   locale: string
 }
 
+/**
+ * This step updates the names of order shipping methods based on the provided locale.
+ * It fetches the translated names of the shipping option associated with each shipping method
+ * and updates the shipping methods accordingly.
+ *
+ * @since 2.12.4
+ *
+ * @example
+ * const updatedShippingMethods = updateOrderShippingMethodsTranslationsStep({
+ *   shippingMethods: [
+ *     {
+ *       id: "sm_123",
+ *       shipping_option_id: "so_123",
+ *       name: "Standard Shipping",
+ *       // ...
+ *     }
+ *   ],
+ *   locale: "fr-FR"
+ * })
+ */
 export const updateOrderShippingMethodsTranslationsStep = createStep(
   updateOrderShippingMethodsTranslationsStepId,
   async (
@@ -30,19 +49,18 @@ export const updateOrderShippingMethodsTranslationsStep = createStep(
     const query = container.resolve(ContainerRegistrationKeys.QUERY)
     const orderModuleService = container.resolve(Modules.ORDER)
 
-    const { data: translatedShippingOptions } = await query.graph({
-      entity: "shipping_option",
-      fields: ["id", "name"],
-      filters: {
-        id: data.shippingMethods.map((sm) => sm.shipping_option_id),
+    const { data: translatedShippingOptions } = await query.graph(
+      {
+        entity: "shipping_option",
+        fields: ["id", "name"],
+        filters: {
+          id: data.shippingMethods.map((sm) => sm.shipping_option_id),
+        },
       },
-    })
-
-    await applyTranslations({
-      localeCode: data.locale,
-      objects: translatedShippingOptions,
-      container,
-    })
+      {
+        locale: data.locale,
+      }
+    )
 
     const shippingOptionTranslationMap = new Map<string, string>(
       translatedShippingOptions.map((tos) => [tos.id, tos.name])

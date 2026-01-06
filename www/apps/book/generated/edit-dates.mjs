@@ -65,7 +65,7 @@ export const generatedEditDates = {
   "app/learn/fundamentals/module-links/custom-columns/page.mdx": "2025-12-09T13:27:05.446Z",
   "app/learn/fundamentals/module-links/directions/page.mdx": "2025-03-17T12:52:06.161Z",
   "app/learn/fundamentals/module-links/page.mdx": "2025-11-28T13:45:06.742Z",
-  "app/learn/fundamentals/module-links/query/page.mdx": "2025-10-27T09:30:26.957Z",
+  "app/learn/fundamentals/module-links/query/page.mdx": "2026-01-06T10:34:40.077Z",
   "app/learn/fundamentals/modules/db-operations/page.mdx": "2025-10-28T16:02:06.265Z",
   "app/learn/fundamentals/modules/multiple-services/page.mdx": "2025-03-18T15:11:44.632Z",
   "app/learn/fundamentals/modules/page.mdx": "2025-12-23T07:00:14.586Z",
@@ -121,10 +121,10 @@ export const generatedEditDates = {
   "app/learn/fundamentals/workflows/errors/page.mdx": "2025-04-25T14:26:25.000Z",
   "app/learn/fundamentals/api-routes/override/page.mdx": "2025-12-22T12:56:06.558Z",
   "app/learn/fundamentals/module-links/index/page.mdx": "2025-05-23T07:57:58.958Z",
-  "app/learn/fundamentals/module-links/index-module/page.mdx": "2025-11-26T11:20:25.961Z",
+  "app/learn/fundamentals/module-links/index-module/page.mdx": "2026-01-06T10:34:35.671Z",
   "app/learn/introduction/build-with-llms-ai/page.mdx": "2025-12-09T14:17:13.295Z",
   "app/learn/installation/docker/page.mdx": "2025-12-18T11:18:25.856Z",
-  "app/learn/fundamentals/generated-types/page.mdx": "2025-07-25T13:17:35.319Z",
+  "app/learn/fundamentals/generated-types/page.mdx": "2026-01-06T06:38:15.719Z",
   "app/learn/introduction/from-v1-to-v2/page.mdx": "2025-10-29T11:55:11.531Z",
   "app/learn/debugging-and-testing/debug-workflows/page.mdx": "2025-07-30T13:45:14.117Z",
   "app/learn/fundamentals/data-models/json-properties/page.mdx": "2025-07-31T14:25:01.268Z",
@@ -137,5 +137,6 @@ export const generatedEditDates = {
   "app/learn/codemods/replace-imports/page.mdx": "2025-10-09T11:37:44.754Z",
   "app/learn/fundamentals/admin/translations/page.mdx": "2025-12-16T13:56:21.400Z",
   "app/learn/configurations/medusa-config/asymmetric-encryption/page.mdx": "2025-10-31T09:53:38.607Z",
-  "app/learn/best-practices/third-party-sync/page.mdx": "2025-12-03T11:48:58.209Z"
+  "app/learn/best-practices/third-party-sync/page.mdx": "2025-12-03T11:48:58.209Z",
+  "app/learn/fundamentals/api-routes/localization/page.mdx": "2026-01-06T10:34:44.853Z"
 }

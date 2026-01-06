@@ -10390,6 +10390,169 @@ This file adds two API Routes:
 - A `POST` API route at `http://localhost:9000/hello-world`.
 
 
+# Localization in API Routes
+
+In this chapter, you'll learn how to handle localization in API routes of your Medusa application to serve content in different languages.
+
+### Prerequisites
+
+- [Medusa v2.12.4 or later](https://github.com/medusajs/medusa/releases/tag/v2.12.4)
+- [Translation Module Configured](https://docs.medusajs.com/resources/commerce-modules/translation#configure-translation-module/index.html.md)
+
+## Overview
+
+Localization in API routes allows you to serve translated content based on the user's preferred language. The Medusa application provides built-in support for handling locale information in API requests and retrieving localized data.
+
+When a locale is specified in a request, you can use it to retrieve translated versions of your data models' fields, providing a seamless multilingual experience for your users.
+
+Learn more about translation, how to manage translations, and how to translate custom data models in the [Translation Module documentation](https://docs.medusajs.com/resources/commerce-modules/translation/index.html.md).
+
+***
+
+## Routes with Localization Enabled by Default
+
+The Medusa application automatically supports retrieving localized content from all routes under the `/store` prefix, including both core and custom store API routes.
+
+For example, the following store routes have localization enabled by default:
+
+- `/store/products` -> Get products with translated fields
+- `/store/collections` -> Get collections with translated fields
+- `/store/categories` -> Get categories with translated fields
+
+### Apply Localization to Custom Routes
+
+If you're creating custom API routes outside the `/store` prefix, you must manually apply the `applyLocale` [middleware](https://docs.medusajs.com/learn/fundamentals/api-routes/middlewares/index.html.md) to enable localization support.
+
+To apply the `applyLocale` middleware to all HTTP methods for a route, add it to the `src/api/middlewares.ts` file:
+
+```ts title="src/api/middlewares.ts" highlights={allMethodsHighlights}
+import { applyLocale, defineMiddlewares } from "@medusajs/framework/http"
+
+export default defineMiddlewares({
+  routes: [
+    {
+      matcher: "/custom*",
+      middlewares: [applyLocale],
+    },
+  ],
+})
+```
+
+This applies the `applyLocale` middleware to all routes matching `/custom*`, regardless of the HTTP method.
+
+Alternatively, you can apply the middleware only to specific HTTP methods using the `method` property:
+
+```ts title="src/api/middlewares.ts" highlights={specificMethodHighlights}
+import { applyLocale, defineMiddlewares } from "@medusajs/framework/http"
+
+export default defineMiddlewares({
+  routes: [
+    {
+      matcher: "/custom*",
+      method: ["GET"],
+      middlewares: [applyLocale],
+    },
+  ],
+})
+```
+
+Learn more about middlewares in the [Middlewares](https://docs.medusajs.com/learn/fundamentals/api-routes/middlewares/index.html.md) chapter.
+
+***
+
+## How to Pass Locale in API Requests
+
+You can pass the locale in API requests to routes that support localization using either of the following methods:
+
+1. The `locale` query parameter
+2. The `x-medusa-locale` request header
+
+The query parameter takes priority over the header if both are provided.
+
+The locale must follow the [IETF BCP 47 standard](https://gist.github.com/typpo/b2b828a35e683b9bf8db91b5404f1bd1), such as `en-US` for English (United States) or `fr-FR` for French (France).
+
+Refer to the [JS SDK reference](https://docs.medusajs.com/resources/js-sdk#localization-with-js-sdk/index.html.md) for details on how to pass locale.
+
+For example:
+
+### Query Parameter
+
+```bash
+curl "http://localhost:9000/store/products?locale=fr-FR" \
+-H 'x-publishable-api-key: {your_publishable_api_key}'
+```
+
+### Header
+
+```bash
+curl "http://localhost:9000/store/products" \
+-H 'x-publishable-api-key: {your_publishable_api_key}' \
+-H 'x-medusa-locale: fr-FR'
+```
+
+The above examples retrieve products with their fields translated to French (France) if translations are available. If no translations exist for the requested locale, the original content stored in the data model is returned.
+
+Store API routes require a publishable API key in the request header. Learn more in the [Store API reference](https://docs.medusajs.com/api/store#publishable-api-key).
+
+***
+
+## Access Request Locale in API Routes
+
+After applying the `applyLocale` middleware, you can access the request's locale from the `locale` property of the `MedusaRequest` object.
+
+For example:
+
+```ts title="src/api/custom/route.ts" highlights={accessLocaleHighlights}
+import type {
+  MedusaRequest,
+  MedusaResponse,
+} from "@medusajs/framework/http"
+
+export const GET = async (
+  req: MedusaRequest,
+  res: MedusaResponse
+) => {
+  const locale = req.locale
+
+  // use locale to retrieve localized data...
+}
+```
+
+The `req.locale` property contains the locale value from either the query parameter or the request header. If no locale is specified in the request, `req.locale` is `undefined`.
+
+### Retrieve Localized Data with Query
+
+To retrieve data models with translated fields, pass the `locale` option to [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md) when querying your data.
+
+For example, to retrieve products with translated names and descriptions:
+
+```ts title="src/api/store/products/route.ts" highlights={queryHighlights}
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+
+export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
+  const query = req.scope.resolve("query")
+
+  const { data: products } = await query.graph({
+    entity: "product",
+    fields: ["id", "title", "description"],
+    options: {
+      locale: req.locale,
+    },
+  })
+
+  res.json({ products })
+}
+```
+
+In this example, the products are retrieved with their `title` and `description` fields translated to the locale specified in the request.
+
+Learn more in the [Query](https://docs.medusajs.com/learn/fundamentals/module-links/query#retrieve-localized-data/index.html.md) chapter.
+
+### Retrieve Localized Data for Custom Models
+
+You can also retrieve localized data for custom data models. Learn more in the [Translate Custom Data Models](https://docs.medusajs.com/resources/commerce-modules/translation/custom-data-models/index.html.md) guide.
+
+
 # Middlewares
 
 In this chapter, you’ll learn about middlewares and how to create them.
@@ -15405,13 +15568,27 @@ Medusa automatically generates TypeScript types for:
 
 ## How to Trigger Type Generation?
 
-The Medusa application generates these types automatically when you run the application with the `dev` command:
+As of [Medusa v2.12.4](https://github.com/medusajs/medusa/releases/tag/v2.12.4), types are generated when you run the `build` command. Prior versions only generated types when running the `dev` command.
+
+The Medusa application generates these types automatically when you run the `build` or `dev` commands:
 
 ```bash npm2yarn
+npm run build
+```
+
+So, if you add a new data model or module and you don't find it in auto-completion or type checking, you can run the `build` command to regenerate the types.
+
+### How to Generate Types for Local Plugins?
+
+This feature is available as of [Medusa v2.12.4](https://github.com/medusajs/medusa/releases/tag/v2.12.4).
+
+Local plugins are plugins installed in your Medusa application with the `plugin:develop` command. To generate types for those plugins, run the `dev` command in the Medusa application:
+
+```bash npm2yarn badgeLabel="Medusa Application" badgeColor="green"
 npm run dev
 ```
 
-So, if you add a new data model or module and you don't find it in auto-completion or type checking, you can run the `dev` command to regenerate the types.
+Medusa will copy the generated types under the `.medusa/types` directory of the application to the local plugin's directory.
 
 ***
 
@@ -16714,6 +16891,31 @@ export const retrieveBrandsWorkflow = createWorkflow(
 ```
 
 This will retrieve all brands that are linked to at least one product.
+
+### Retrieve Localized Data
+
+### Prerequisites
+
+- [Medusa v2.12.4 or later](https://github.com/medusajs/medusa/releases/tag/v2.12.4)
+- [Translation Module Configured](https://docs.medusajs.com/resources/commerce-modules/translation#configure-translation-module/index.html.md)
+
+To retrieve localized data for data models that have translations, pass an `options.locale` property to the first parameter of the `query.index` method:
+
+```ts highlights={[["5", "options", "Pass the locale to retrieve localized data."]]}
+const { data: products } = await query.index({
+  entity: "product",
+  fields: ["id", "title", "description"],
+  options: {
+    locale: "fr-FR",
+  },
+})
+```
+
+The `options.locale` property is a string representing the locale code following the [IETF BCP 47 standard](https://gist.github.com/typpo/b2b828a35e683b9bf8db91b5404f1bd1).
+
+The returned products will have their `title` and `description` properties in French (`fr-FR`), if translations are available.
+
+Learn more in the [Translation Module](https://docs.medusajs.com/resources/commerce-modules/translation/index.html.md) documentation.
 
 
 # Link
@@ -18281,6 +18483,47 @@ const { data: posts } = useQueryGraphStep({
 ```
 
 In the example above, you retrieve only deleted posts by enabling the `withDeleted` property and adding a filter to only retrieve records where the `deleted_at` property is not `null`.
+
+***
+
+## Retrieve Localized Data
+
+### Prerequisites
+
+- [Medusa v2.12.4 or later](https://github.com/medusajs/medusa/releases/tag/v2.12.4)
+- [Translation Module Configured](https://docs.medusajs.com/resources/commerce-modules/translation#configure-translation-module/index.html.md)
+
+To retrieve localized data for data models that have translations, pass an `options.locale` property to the first parameter of the `query.graph` method.
+
+### query.graph
+
+```ts highlights={[["5", "options", "Pass the locale to retrieve localized data."]]}
+const { data: products } = await query.graph({
+  entity: "product",
+  fields: ["id", "title", "description"],
+  options: {
+    locale: "fr-FR",
+  },
+})
+```
+
+### useQueryGraphStep
+
+```ts highlights={[["5", "options", "Pass the locale to retrieve localized data."]]}
+const { data: products } = useQueryGraphStep({
+  entity: "product",
+  fields: ["id", "title", "description"],
+  options: {
+    locale: "fr-FR",
+  },
+})
+```
+
+The `options.locale` property is a string representing the locale code following the [IETF BCP 47 standard](https://gist.github.com/typpo/b2b828a35e683b9bf8db91b5404f1bd1).
+
+The returned products will have their `title` and `description` properties in French (`fr-FR`), if translations are available.
+
+Learn more in the [Translation Module](https://docs.medusajs.com/resources/commerce-modules/translation/index.html.md) documentation.
 
 ***
 
@@ -43176,6 +43419,301 @@ console.log(translations)
 ```
 
 
+# Translate Custom Data Models
+
+In this chapter, you'll learn how to support translations for your custom data models using the Translation Module.
+
+### Prerequisites
+
+- [Medusa v2.12.4 or later](https://github.com/medusajs/medusa/releases/tag/v2.12.4)
+- [Translation Module Configured](https://docs.medusajs.com/commerce-modules/translation#configure-translation-module/index.html.md)
+
+## Summary
+
+The Translation Module allows you to extend translation capabilities to custom data models in your Medusa application. Then, you can [manage translations from the Medusa Admin](https://docs.medusajs.com/user-guide/settings/translations/index.html.md), and serve translated resources in your configured locales.
+
+By following this guide, you'll learn how to:
+
+- Configure the Translation Module to support translations for your custom data models.
+- Manage translations for your custom data models from the Medusa Admin.
+- Serve translated resources in your configured locales.
+
+***
+
+## Prerequisites: Custom Data Model
+
+This guide assumes you already have a custom [module](https://docs.medusajs.com/docs/learn/fundamentals/modules/index.html.md) with a data model. The guide will use a Blog Module with the following `Post` data model as an example:
+
+```ts title="src/modules/blog/models/post.ts"
+import { model } from "@medusajs/framework/utils"
+
+const Post = model.define("post", {
+  id: model.id().primaryKey(),
+  title: model.text(),
+})
+
+export default Post
+```
+
+The module must also be registered in `medusa-config.ts`. For example:
+
+```ts title="medusa-config.ts"
+module.exports = defineConfig({
+  // ...
+  modules: [
+    // other modules...
+    {
+      resolve: "./src/modules/blog",
+    },
+  ],
+})
+```
+
+***
+
+## Step 1: Configure Translatable Entities
+
+The first step is to configure the Translation Module with the custom entities you want to support translations for.
+
+Before proceeding, run the `build` command to ensure the generated types are up-to-date:
+
+```bash npm2yarn
+npm run build
+```
+
+This will allow you to benefit from auto-completion when configuring the Translation Module.
+
+Next, in `medusa-config.ts`, add the `options.entities` property to the Translation Module configuration:
+
+```ts title="medusa-config.ts" highlights={configHighlights}
+module.exports = defineConfig({
+  // ...
+  modules: [
+    // other modules...
+    {
+      resolve: "@medusajs/medusa/translation",
+      options: {
+        entities: [
+          {
+            type: "post",
+            fields: ["title"],
+          },
+        ],
+      },
+    },
+  ],
+})
+```
+
+The `options.entities` option is an array of objects indicating the custom data models to support translations for. Each object has the following properties:
+
+1. `type`: The name of the table where the custom data model is stored. This is the same value passed as the first parameter to `model.define`.
+2. `fields`: An array of fields in the custom data model to support translations for.
+
+***
+
+## Step 2: Manage Translations from Medusa Admin
+
+After configuring the Translation Module, you can manage translations for your custom data models from the Medusa Admin.
+
+Run the following command to start the Medusa application:
+
+```bash npm2yarn
+npm run dev
+```
+
+Then, open the Medusa Admin and go to Settings -> Translations. You should see your custom data model in the list of translatable resources.
+
+![Post data model highlighted in the list of translatable resources in the Medusa Admin](https://res.cloudinary.com/dza7lstvk/image/upload/v1767687396/Medusa%20Resources/CleanShot_2026-01-06_at_10.12.09_2x_w1hmua.png)
+
+Click the Edit button for your custom data model to manage translations for its resources. You can manage translations for the configured locales and fields.
+
+Learn more in the [Translations User Guide](https://docs.medusajs.com/user-guide/settings/translations/index.html.md).
+
+***
+
+## Step 3: Serve Translated Resources
+
+Finally, you can serve translated resources for your custom data models in your configured locales. This section focuses on returning records with translated fields from API routes.
+
+### Pass Locale in API Requests
+
+Medusa supports passing the desired locale in API requests to `/store` routes using either:
+
+1. The `locale` query parameter.
+2. The `x-medusa-locale` header.
+
+For example, assuming you have a `/store/posts` API route, you can pass the locale in the request as follows:
+
+### Query Parameter
+
+```bash
+curl "http://localhost:9000/store/posts?locale=fr-FR" \
+-H 'x-publishable-api-key: {your_publishable_api_key}'
+```
+
+### Request Header
+
+```bash
+curl "http://localhost:9000/store/posts" \
+-H 'x-publishable-api-key: {your_publishable_api_key}' \
+-H 'x-medusa-locale: fr-FR'
+```
+
+You must pass a publishable API key in the request header to store API routes. Learn more in the [Store API reference](https://docs.medusajs.com/api/store#publishable-api-key).
+
+If your API route isn't under the `/store` prefix, you must apply the `applyLocale` middleware. For example, add the middleware to the `src/api/middlewares.ts` file:
+
+```ts title="src/api/middlewares.ts"
+import { applyLocale, defineMiddlewares } from "@medusajs/framework/http"
+
+export default defineMiddlewares({
+  routes: [
+    {
+      matcher: "/posts",
+      middlewares: [applyLocale],
+    },
+  ],
+})
+```
+
+This allows you to pass the locale in the query parameter or request header for the `/posts` API route.
+
+### Handle Translations in API Routes
+
+In your custom API routes, you can retrieve the request's locale from the `locale` property of the `MedusaRequest` object. Pass that property to [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md) to retrieve your data models with translated fields.
+
+For example, to retrieve blog posts with translated titles in the `/store/posts` API route:
+
+```ts title="src/api/routes/store/posts.ts" highlights={apiRouteHighlights}
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+
+export async function GET(
+  req: MedusaRequest,
+  res: MedusaResponse
+) {
+  const query = req.scope.resolve("query")
+
+  const { data: posts } = await query.graph({
+    entity: "post",
+    fields: ["id", "title"],
+    options: {
+      locale: req.locale,
+    },
+  })
+
+  res.json({ posts })
+}
+```
+
+In this example, the `locale` option is set to `req.locale`. Medusa will set the `title` field of each post to its translated value if a translation is available for the requested locale. Otherwise, it returns the original value stored in the data model.
+
+***
+
+## Step 4: Test the Implementation
+
+To test the implementation, start the Medusa application if you haven't already:
+
+```bash npm2yarn
+npm run dev
+```
+
+Then, send a request to your custom API route with the desired locale. For example:
+
+```bash
+curl "http://localhost:9000/store/posts?locale=fr-FR" \
+-H 'x-publishable-api-key: {your_publishable_api_key}'
+```
+
+This should return the list of blog posts with their French translations for the `title` field if available:
+
+```json
+{
+  "posts": [
+    {
+      "id": "post_123",
+      "title": "Titre de l'Article"
+    },
+    {
+      "id": "post_456",
+      "title": "Un Autre Titre"
+    }
+  ]
+}
+```
+
+***
+
+## Pass Locale to useQueryGraphStep
+
+If your API route executes a workflow and returns its result, you can retrieve data models with translated fields in the workflow by passing the locale to `useQueryGraphStep`.
+
+For example:
+
+```ts title="src/workflows/handle-posts.ts" highlights={workflowHighlights}
+import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
+
+type WorkflowInput = {
+  locale: string;
+}
+
+export const handlePostsWorkflow = createWorkflow(
+  "handle-posts",
+  (input: WorkflowInput) => {
+    // do something...
+    
+    const { data: posts } = useQueryGraphStep({
+      entity: "post",
+      fields: ["id", "title"],
+      options: {
+        locale: input.locale,
+      },
+    })
+
+    return new WorkflowResponse({
+      posts,
+    })
+  }
+)
+```
+
+In this example, the workflow accepts a `locale` input parameter. You then retrieve the posts with translated titles by passing the `locale` input to `useQueryGraphStep`.
+
+The returned posts will have their `title` field set to the translated value if a translation is available for the requested locale.
+
+You can execute the workflow in your custom API routes and pass the request locale as an input parameter:
+
+```ts title="src/api/routes/store/posts.ts"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { handlePostsWorkflow } from "../../workflows/handle-posts"
+
+export async function GET(
+  req: MedusaRequest,
+  res: MedusaResponse
+) {
+  const { result } = await handlePostsWorkflow(req.scope)
+    .run({
+      input: {
+        locale: req.locale,
+      },
+    })
+
+  res.json(result)
+}
+```
+
+The returned posts in the API response will have their `title` field set to the translated value if a translation is available for the requested locale.
+
+***
+
+## Manage Translations with the Translation Module Service
+
+For more complex cases, you can manage translations for your custom data models programmatically using the Translation Module's service. You can create, update, delete, and retrieve translations of any resource using the service's methods.
+
+Refer to the [Translation Module service reference](https://docs.medusajs.com/references/translation/index.html.md) for a full list of available methods and how to use them.
+
+
 # Links between Translation Module and Other Modules
 
 This document showcases the module links that Medusa defines between the Translation Module and other Commerce Modules.
@@ -43299,7 +43837,7 @@ In this section of the documentation, you will find resources to learn more abou
 ### Prerequisites
 
 - [Medusa v2.12.3 or later](https://github.com/medusajs/medusa/releases/tag/v2.12.3)
-- [Translation Feature Flag Enabled](#)
+- [Translation Feature Flag Enabled](#configure-translation-module)
 
 Refer to the [Medusa Admin User Guide](https://docs.medusajs.com/user-guide/settings/translations/index.html.md) to learn how to manage translations in the dashboard.
 
@@ -43311,6 +43849,7 @@ Refer to the [Module Isolation](https://docs.medusajs.com/docs/learn/fundamental
 
 - [Translation and Locale Management](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/translation/concepts/index.html.md): Manage locales and add translations for different resources in your store.
 - [Multi-Language Support](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/translation/storefront/index.html.md): Manage and serve resources like products in multiple languages to cater to a diverse customer base.
+- [Translation for Custom Models](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/translation/custom-data-models/index.html.md): Extend translation capabilities to custom data models in your Medusa application.
 
 ***
 
@@ -43471,9 +44010,25 @@ Refer to the [Workflows](https://docs.medusajs.com/docs/learn/fundamentals/workf
 
 ## Supported Module Translations
 
-The Translation Module currently supports translations for all data models in the [Product Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/product/index.html.md), including products, product variants, and categories.
+The Translation Module currently supports translations for the following data models:
 
-Future versions of the Translation Module will include support for all Commerce Modules, as well as custom modules.
+|Data Model|Translatable Fields|
+|---|---|
+|\`CustomerGroup\`|\`name\`|
+|\`Product\`||
+|\`ProductCategory\`||
+|\`ProductCollection\`|\`title\`|
+|\`ProductOption\`|\`title\`|
+|\`ProductOptionValue\`|\`value\`|
+|\`ProductTag\`|\`value\`|
+|\`ProductType\`|\`value\`|
+|\`ProductVariant\`||
+|\`Region\`|\`name\`|
+|\`ShippingOption\`|\`name\`|
+|\`ShippingOptionType\`||
+|\`TaxRate\`|\`name\`|
+
+Future versions of the Translation Module will include support for all Commerce Modules.
 
 ***
 
@@ -43505,7 +44060,7 @@ You must pass a publishable API key in the request header to store API routes. L
 
 ## Retrieve Translations for Resources
 
-Currently, you can retrieve translations using the [Store API routes](https://docs.medusajs.com/api/store) for product-related resources, such as products, product variants, and categories. Future releases will expand translation support to additional resources.
+You can retrieve translations using the [Store API routes](https://docs.medusajs.com/api/store) for [supported](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/translation#supported-module-translations/index.html.md) and [custom](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/translation/custom-data-models/index.html.md) data models. Future releases will expand translation support to additional resources.
 
 Medusa determines the locale for the request in the following order of priority:
 
@@ -43514,7 +44069,7 @@ Medusa determines the locale for the request in the following order of priority:
 
 If translations aren't available for the selected locale, or no locale is selected, the original content stored in the resource's data model is returned.
 
-For example:
+For example, to retrieve products with translations in French (France):
 
 ```bash
 curl "http://localhost:9000/store/products?locale=fr-FR" \
@@ -44607,7 +45162,7 @@ The Analytics Module and its providers are available starting [Medusa v2.8.3](ht
 ### Prerequisites
 
 - [PostHog account](https://app.posthog.com/signup)
-- [PostHog API Key](https://posthog.com/docs/getting-started/api-key)
+- [PostHog API Key](https://posthog.com/docs/api)
 
 Add the module into the `provider` object of the Analytics Module:
 

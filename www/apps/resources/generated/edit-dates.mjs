@@ -6743,8 +6743,8 @@ export const generatedEditDates = {
   "app/commerce-modules/store/locales/page.mdx": "2025-12-16T07:13:12.389Z",
   "app/commerce-modules/translation/concepts/page.mdx": "2025-12-16T07:13:50.326Z",
   "app/commerce-modules/translation/link-to-other-modules/page.mdx": "2025-12-10T13:23:44.262Z",
-  "app/commerce-modules/translation/page.mdx": "2025-12-10T15:31:44.251Z",
-  "app/commerce-modules/translation/storefront/page.mdx": "2025-12-16T07:15:02.192Z",
+  "app/commerce-modules/translation/page.mdx": "2026-01-06T08:32:43.208Z",
+  "app/commerce-modules/translation/storefront/page.mdx": "2026-01-06T08:50:03.221Z",
   "app/storefront-development/localization/page.mdx": "2025-12-16T07:18:51.976Z",
   "app/commerce-modules/translation/js-sdk/page.mdx": "2025-12-10T15:24:57.155Z",
   "app/commerce-modules/translation/workflows/page.mdx": "2025-12-10T15:24:45.190Z",
@@ -6936,5 +6936,6 @@ export const generatedEditDates = {
   "references/js_sdk/admin/ShippingOptionType/properties/js_sdk.admin.ShippingOptionType.client/page.mdx": "2025-12-17T14:31:14.186Z",
   "app/how-to-tutorials/how-to/admin/auth/page.mdx": "2025-12-30T06:35:28.828Z",
   "app/integrations/guides/okta/page.mdx": "2025-12-30T06:35:28.653Z",
-  "app/nextjs-starter/guides/remove-country-code/page.mdx": "2025-12-30T10:28:10.072Z"
+  "app/nextjs-starter/guides/remove-country-code/page.mdx": "2025-12-30T10:28:10.072Z",
+  "app/commerce-modules/translation/custom-data-models/page.mdx": "2026-01-06T08:49:12.704Z"
 }

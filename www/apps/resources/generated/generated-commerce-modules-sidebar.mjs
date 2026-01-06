@@ -17227,6 +17227,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "link",
+              "path": "/commerce-modules/translation/custom-data-models",
+              "title": "Translate Custom Models",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
               "path": "/commerce-modules/translation/storefront",
               "title": "Translation in Storefront",
               "children": []
