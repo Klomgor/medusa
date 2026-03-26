@@ -3826,7 +3826,7 @@ __metadata:
     eslint: 8.56.0
     fdir: ^6.5.0
     glob: 11.1.0
-    minimatch: ^9.0.3
+    minimatch: ^10.2.3
     openai: ^4.29.1
     openapi-types: ^12.1.3
     pluralize: ^8.0.0
@@ -5437,13 +5437,13 @@ __metadata:
   linkType: hard
 
 "katex@npm:^0.16.9":
-  version: 0.16.42
-  resolution: "katex@npm:0.16.42"
+  version: 0.16.43
+  resolution: "katex@npm:0.16.43"
   dependencies:
     commander: ^8.3.0
   bin:
     katex: cli.js
-  checksum: 2c75ae7c3639ad2d6ff722f3af9359f6745cb4ed6f42c74f898198c643787d2e0774aa1cac8dbfa5a9890474b371ef00257f09b8e6df76da5ce02a823ed006b3
+  checksum: 62873b03107afd7b68054c92b414700b73bf606f42518d6f01f1f8104f5f876be0cbe096142742f8803638809ea3726d05812a4de17b5287e0f79a56ab932b91
   languageName: node
   linkType: hard
 
@@ -6096,7 +6096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.1, minimatch@npm:^10.1.1":
+"minimatch@npm:^10.1.1, minimatch@npm:^10.2.3":
   version: 10.2.4
   resolution: "minimatch@npm:10.2.4"
   dependencies:
@@ -6114,7 +6114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.1, minimatch@npm:^9.0.3, minimatch@npm:^9.0.4, minimatch@npm:^9.0.5":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.4, minimatch@npm:^9.0.5":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:
@@ -7714,7 +7714,7 @@ __metadata:
     "@types/node": ^20.12.10
     eslint: ^9.13.0
     glob: 11.1.0
-    minimatch: ^10.0.1
+    minimatch: ^10.2.3
     types: "*"
     typescript: ^5.6.2
     utils: "*"
