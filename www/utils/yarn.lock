@@ -3826,7 +3826,7 @@ __metadata:
     eslint: 8.56.0
     fdir: ^6.5.0
     glob: 11.1.0
-    minimatch: ^9.0.3
+    minimatch: ^10.2.3
     openai: ^4.29.1
     openapi-types: ^12.1.3
     pluralize: ^8.0.0
@@ -4896,9 +4896,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"handlebars@npm:^4.7.8":
-  version: 4.7.8
-  resolution: "handlebars@npm:4.7.8"
+"handlebars@npm:^4.7.9":
+  version: 4.7.9
+  resolution: "handlebars@npm:4.7.9"
   dependencies:
     minimist: ^1.2.5
     neo-async: ^2.6.2
@@ -4910,7 +4910,7 @@ __metadata:
       optional: true
   bin:
     handlebars: bin/handlebars
-  checksum: 7aff423ea38a14bb379316f3857fe0df3c5d66119270944247f155ba1f08e07a92b340c58edaa00cfe985c21508870ee5183e0634dcb53dd405f35c93ef7f10d
+  checksum: 22f8105a7e68e81aff2662bb434edf05f757d21d850731d71cec886d69c10cd33d3c43e34b2892968ec62de8241611851d3d0674c8ef324ea3e01dc66262faa9
   languageName: node
   linkType: hard
 
@@ -6096,7 +6096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.1, minimatch@npm:^10.1.1":
+"minimatch@npm:^10.1.1, minimatch@npm:^10.2.3":
   version: 10.2.4
   resolution: "minimatch@npm:10.2.4"
   dependencies:
@@ -6114,7 +6114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.1, minimatch@npm:^9.0.3, minimatch@npm:^9.0.4, minimatch@npm:^9.0.5":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.4, minimatch@npm:^9.0.5":
   version: 9.0.9
   resolution: "minimatch@npm:9.0.9"
   dependencies:
@@ -7714,7 +7714,7 @@ __metadata:
     "@types/node": ^20.12.10
     eslint: ^9.13.0
     glob: 11.1.0
-    minimatch: ^10.0.1
+    minimatch: ^10.2.3
     types: "*"
     typescript: ^5.6.2
     utils: "*"
@@ -7731,7 +7731,7 @@ __metadata:
     "@types/js-beautify": ^1.14.3
     "@types/node": ^20.12.10
     copyfiles: ^2.4.1
-    handlebars: ^4.7.8
+    handlebars: ^4.7.9
     js-beautify: ^1.15.1
     slugify: ^1.6.6
     typedoc: ^0.27.5
