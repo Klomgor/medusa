@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@mikro-orm/cli": "6.6.12",
-    "@mikro-orm/core": "6.6.12",
+    "@mikro-orm/core": "7.0.14",
     "@mikro-orm/knex": "6.6.12",
     "@mikro-orm/migrations": "6.6.12",
     "@mikro-orm/postgresql": "6.6.12",
