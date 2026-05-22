@@ -67,7 +67,7 @@
     "lodash.isequal": "^4.5.0",
     "match-sorter": "^6.3.4",
     "motion": "^11.15.0",
-    "qs": "^6.12.1",
+    "qs": "^6.14.2",
     "radix-ui": "1.1.2",
     "react": "^18.3.1",
     "react-country-flag": "^3.1.0",
@@ -86,7 +86,7 @@
     "@medusajs/types": "2.15.4",
     "@medusajs/ui-preset": "2.15.4",
     "@typescript/native-preview": "^7.0.0-dev.20260423.1",
-    "eslint": "8",
+    "eslint": "9",
     "typescript": "5.9.3"
   },
   "packageManager": "yarn@3.2.1"
