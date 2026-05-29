@@ -34,12 +34,12 @@
     "pluralize": "^8.0.0",
     "slugify": "^1.6.6",
     "tags": "*",
-    "yaml": "^2.7.0"
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
     "@types/pluralize": "^0.0.33",
-    "next": "15.3.9",
+    "next": "15.5.18",
     "rimraf": "^5.0.5",
     "tsconfig": "*",
     "types": "*",
