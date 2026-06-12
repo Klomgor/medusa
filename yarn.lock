@@ -3645,7 +3645,7 @@ __metadata:
     match-sorter: ^6.3.4
     motion: ^11.15.0
     qrcode: ^1.5.4
-    qs: ^6.12.1
+    qs: ^6.15.2
     radix-ui: 1.1.2
     react: ^18.3.1
     react-country-flag: ^3.1.0
@@ -3930,7 +3930,7 @@ __metadata:
   dependencies:
     "@medusajs/types": 2.15.5
     fetch-event-stream: ^0.1.5
-    qs: ^6.12.1
+    qs: ^6.15.2
   languageName: unknown
   linkType: soft
 
@@ -4114,7 +4114,7 @@ __metadata:
     jsonwebtoken: ^9.0.2
     multer: ^2.0.2
     node-schedule: ^2.1.1
-    qs: ^6.12.1
+    qs: ^6.15.2
     request-ip: ^3.3.0
     slugify: ^1.6.6
     uuid: ^11.1.1
@@ -13572,7 +13572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:8.17.1, ajv@npm:^8.0.0, ajv@npm:^8.12.0, ajv@npm:^8.17.1":
+"ajv@npm:8.17.1, ajv@npm:^8.0.0, ajv@npm:^8.12.0":
   version: 8.17.1
   resolution: "ajv@npm:8.17.1"
   dependencies:
@@ -13605,6 +13605,18 @@ __metadata:
     json-schema-traverse: ^0.4.1
     uri-js: ^4.2.2
   checksum: 67966499dd272ecde1c2e467084411132891523d057487587879d39ac04207f4351b7b2324c83198013967fbfa632c1612adc960114a30770fbe07a0773b32c2
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^8.18.0":
+  version: 8.18.0
+  resolution: "ajv@npm:8.18.0"
+  dependencies:
+    fast-deep-equal: ^3.1.3
+    fast-uri: ^3.0.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+  checksum: e7517c426173513a07391be951879932bdf3348feaebd2199f5b901c20f99d60db8cd1591502d4d551dc82f594e82a05c4fe1c70139b15b8937f7afeaed9532f
   languageName: node
   linkType: hard
 
@@ -16564,14 +16576,14 @@ __metadata:
   linkType: hard
 
 "dompurify@npm:^3.0.6":
-  version: 3.3.1
-  resolution: "dompurify@npm:3.3.1"
+  version: 3.4.9
+  resolution: "dompurify@npm:3.4.9"
   dependencies:
     "@types/trusted-types": ^2.0.7
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: fa0a8c55a436ba0d54389195e3d2337e311f56de709a2fc9efc98dbbc7746fa53bb4b74b6ac043b77a279a8f2ebd8685f0ebaa6e58c9e32e92051d529bc0baf8
+  checksum: e03d88d5959dcaae172357002d74e47e66fc6685cac8928fe4b02982f7b4051e2b8ff70279e4e6fb13be112c0e5cae11439ab960c06c487cb91a3c1a18baed49
   languageName: node
   linkType: hard
 
@@ -24562,12 +24574,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.10.0, qs@npm:^6.11.0, qs@npm:^6.11.2, qs@npm:^6.12.1, qs@npm:~6.14.0":
+"qs@npm:^6.10.0, qs@npm:^6.11.0, qs@npm:^6.11.2, qs@npm:~6.14.0":
   version: 6.14.0
   resolution: "qs@npm:6.14.0"
   dependencies:
     side-channel: ^1.1.0
   checksum: 8ea5d91bf34f440598ee389d4a7d95820e3b837d3fd9f433871f7924801becaa0cd3b3b4628d49a7784d06a8aea9bc4554d2b6d8d584e2d221dc06238a42909c
+  languageName: node
+  linkType: hard
+
+"qs@npm:^6.15.2":
+  version: 6.15.2
+  resolution: "qs@npm:6.15.2"
+  dependencies:
+    side-channel: ^1.1.0
+  checksum: e6fd5f6f0aab06d480fe9ab15cebfc4ce4235303e2f91dc69a8f7f4df1e668a61c11d1cfbabacf4295cbbeb7b670ed23db45307480726259761f98e5695e93a7
   languageName: node
   linkType: hard
 
@@ -25922,7 +25943,7 @@ __metadata:
     "@typescript-eslint/rule-tester": ^8.0.0
     "@vitejs/plugin-react": ^4.2.1
     "@vitest/coverage-v8": ^0.32.2
-    ajv: ^8.17.1
+    ajv: ^8.18.0
     autocannon: ^8.0.0
     autoprefixer: ^10.4.19
     awilix: ^8.0.1
